@@ -311,6 +311,22 @@ export default function App() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Google Translate pushes <body> down (top: 40px) while its bar is showing.
+  // Keep the fixed nav below the bar instead of underneath it.
+  useEffect(() => {
+    const nav = document.querySelector<HTMLElement>(".nav-root");
+    if (!nav) return;
+    const sync = () => {
+      const offset = parseFloat(getComputedStyle(document.body).top) || 0;
+      nav.style.top = offset > 0 ? `${offset}px` : "";
+    };
+    const mo = new MutationObserver(sync);
+    mo.observe(document.body, { childList: true, attributes: true, attributeFilter: ["style", "class"] });
+    mo.observe(document.head, { childList: true });
+    sync();
+    return () => mo.disconnect();
+  }, []);
+
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));

@@ -447,6 +447,3 @@ body { line-height: var(--a11y-lh, 1.5); letter-spacing: var(--a11y-ls, normal);
   border-left: 4px solid var(--green);
 }
 @media (min-width: 768px) { .google-summary { grid-template-columns: auto 1fr; gap: 4rem; align-items: center; } }
-
-/* ── Google Translate bar: keep the fixed nav below it while translated ─ */
-body.translated-ltr .nav-root, body.translated-rtl .nav-root { top: 40px; }
