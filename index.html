@@ -7,6 +7,17 @@
     <title>Atlantic Dental Care | Dr. Evelyn Luma DDS | Virginia Beach, VA</title>
     <!-- figma:head-end -->
 
+    <!-- ── Performance: connect early, load fonts without blocking, preload LCP image ── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" />
+    <link rel="preload" as="image" fetchpriority="high" href="https://images.unsplash.com/photo-1489278353717-f64c6ee8a4d2?w=1400&h=900&fit=crop&auto=format&crop=top" />
+
+    <!-- ── Icons / theme ── -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#162b50" />
+
     <!-- ── Primary SEO ── -->
     <meta name="description" content="Dr. Evelyn Luma DDS in Virginia Beach, VA — personalized, gentle dental care including dental implants, Invisalign, Zoom! whitening, cosmetic dentistry & preventive cleanings. New patients welcome. Call 757-430-2600." />
     <meta name="keywords" content="dentist Virginia Beach, Virginia Beach dentist, dental implants Virginia Beach, Invisalign Virginia Beach, teeth whitening Virginia Beach, cosmetic dentist Virginia Beach, emergency dentist Virginia Beach, Dr Evelyn Luma, Atlantic Dental Care, family dentist Hampton Roads, dentist 23454, Perimeter Pkwy dentist" />
@@ -27,11 +38,16 @@
     <meta property="og:description" content="Personalized, gentle dental care in Virginia Beach — dental implants, Invisalign, Zoom whitening, cosmetic & preventive dentistry. New patients welcome." />
     <meta property="og:locale" content="en_US" />
     <meta property="og:site_name" content="Atlantic Dental Care" />
+    <meta property="og:image" content="https://www.drluma.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Atlantic Dental Care — Dr. Evelyn Luma DDS, Virginia Beach" />
 
     <!-- ── Twitter Card ── -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Atlantic Dental Care | Dr. Evelyn Luma DDS | Virginia Beach" />
     <meta name="twitter:description" content="Gentle, personalized dental care in Virginia Beach VA — implants, Invisalign, whitening & more. Call 757-430-2600." />
+    <meta name="twitter:image" content="https://www.drluma.com/og-image.jpg" />
 
     <!-- ── JSON-LD: Dentist Local Business ── -->
     <script type="application/ld+json">
@@ -44,7 +60,9 @@
       "telephone": "+1-757-430-2600",
       "faxNumber": "+1-757-460-2600",
       "email": "dora@drluma.com",
-      "image": "https://www.drluma.com/logo.png",
+      "image": "https://www.drluma.com/og-image.jpg",
+      "logo": "https://www.drluma.com/logo.jpg",
+      "hasMap": "https://www.google.com/maps/search/?api=1&query=1244+Perimeter+Pkwy+Suite+444+Virginia+Beach+VA+23454",
       "description": "Atlantic Dental Care, PLC offers personalized, gentle dental care in Virginia Beach, VA including dental implants, Invisalign, Zoom whitening, cosmetic dentistry, and preventive cleanings.",
       "priceRange": "$$",
       "paymentAccepted": "Cash, Credit Card, CareCredit",
@@ -165,7 +183,7 @@
         new google.translate.TranslateElement({ pageLanguage: "en", autoDisplay: false }, "google_translate_element");
       }
     </script>
-    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script async src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </head>
   <body>
     <!-- figma:body-start -->

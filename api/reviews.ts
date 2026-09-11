@@ -7,9 +7,11 @@
  * returned array so different reviews appear on every visit.
  *
  * Required environment variables (set in Vercel project settings):
- *   GOOGLE_PLACES_API_KEY  — Google Cloud API key with Places API enabled
+ *   GOOGLE_PLACES_API_KEY  — Google Cloud API key with "Places API (New)" enabled
+ *                            (the legacy Places API is no longer available to new projects)
  *   GOOGLE_PLACE_ID        — Place ID for Atlantic Dental Care
  *                            Find yours: https://developers.google.com/maps/documentation/places/web-service/place-id
+ *                            Note: Google returns at most 5 reviews per place.
  *   FACEBOOK_PAGE_ID       — Numeric Facebook Page ID
  *   FACEBOOK_PAGE_TOKEN    — Long-lived Page Access Token
  *                            Generate: https://developers.facebook.com/tools/explorer
@@ -27,17 +29,16 @@ export interface Review {
   time: number;
 }
 
+// Places API (New) — https://developers.google.com/maps/documentation/places/web-service/place-details
 interface GooglePlacesResponse {
-  result?: {
-    reviews?: Array<{
-      author_name: string;
-      profile_photo_url: string;
-      rating: number;
-      text: string;
-      time: number;
-    }>;
-  };
-  status?: string;
+  reviews?: Array<{
+    rating?: number;
+    text?: { text?: string; languageCode?: string };
+    originalText?: { text?: string };
+    publishTime?: string; // RFC 3339
+    authorAttribution?: { displayName?: string; uri?: string; photoUri?: string };
+  }>;
+  error?: { code?: number; message?: string; status?: string };
 }
 
 interface FacebookRatingsResponse {
@@ -59,31 +60,35 @@ export default async function handler(): Promise<Response> {
 
   if (GOOGLE_KEY && PLACE_ID) {
     try {
-      const url =
-        `https://maps.googleapis.com/maps/api/place/details/json` +
-        `?place_id=${encodeURIComponent(PLACE_ID)}` +
-        `&fields=reviews` +
-        `&key=${encodeURIComponent(GOOGLE_KEY)}`;
+      const url = `https://places.googleapis.com/v1/places/${encodeURIComponent(PLACE_ID)}?languageCode=en`;
 
-      const res  = await fetch(url);
+      const res  = await fetch(url, {
+        headers: {
+          "X-Goog-Api-Key":   GOOGLE_KEY,
+          "X-Goog-FieldMask": "reviews",
+        },
+      });
       const data = (await res.json()) as GooglePlacesResponse;
 
-      if (data.result?.reviews) {
-        data.result.reviews.forEach((r, i) => {
-          if (r.text?.trim().length > 20) {
+      if (data.reviews) {
+        data.reviews.forEach((r, i) => {
+          const text = (r.text?.text ?? r.originalText?.text ?? "").trim();
+          if (text.length > 20) {
             reviews.push({
               id:     `google-${i}`,
               source: "google",
-              name:   r.author_name,
-              photo:  r.profile_photo_url || null,
-              rating: r.rating,
-              text:   r.text,
-              time:   r.time,
+              name:   r.authorAttribution?.displayName ?? "Google Reviewer",
+              photo:  r.authorAttribution?.photoUri ?? null,
+              rating: r.rating ?? 5,
+              text,
+              time:   r.publishTime
+                ? Math.floor(new Date(r.publishTime).getTime() / 1000)
+                : Math.floor(Date.now() / 1000),
             });
           }
         });
-      } else if (data.status && data.status !== "OK") {
-        errors.push(`Google Places status: ${data.status}`);
+      } else if (data.error) {
+        errors.push(`Google Places ${data.error.status ?? res.status}: ${data.error.message ?? "unknown error"}`);
       }
     } catch (e) {
       errors.push(`Google Places error: ${String(e)}`);

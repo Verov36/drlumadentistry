@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 @import 'tailwindcss';
 
 /* ── Brand tokens ─────────────────────────────────────────── */
@@ -378,3 +376,6 @@ body.a11y-sr :focus {
 
 /* Apply CSS custom properties for line-height and letter-spacing */
 body { line-height: var(--a11y-lh, 1.5); letter-spacing: var(--a11y-ls, normal); }
+
+/* ── Hero scroll hint: hide on phones (overlaps the stat grid) ─ */
+@media (max-width: 767px) { .scroll-hint { display: none; } }

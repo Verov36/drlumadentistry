@@ -1,69 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
-
-  <!-- Homepage / primary landing page -->
+<!--
+  Only real, crawlable URLs belong here. Section anchors (/#services etc.)
+  are ignored by Google and were removed. When dedicated pages are added
+  (e.g. /dental-implants-virginia-beach, /invisalign-virginia-beach),
+  list each one below with its own <url> entry.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.drluma.com/</loc>
-    <lastmod>2026-08-25</lastmod>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
-
-  <!-- Services section -->
-  <url>
-    <loc>https://www.drluma.com/#services</loc>
-    <lastmod>2026-08-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- About Dr. Luma -->
-  <url>
-    <loc>https://www.drluma.com/#about</loc>
-    <lastmod>2026-08-25</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Team -->
-  <url>
-    <loc>https://www.drluma.com/#team</loc>
-    <lastmod>2026-08-25</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- Smile Gallery -->
-  <url>
-    <loc>https://www.drluma.com/#gallery</loc>
-    <lastmod>2026-08-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Reviews -->
-  <url>
-    <loc>https://www.drluma.com/#reviews</loc>
-    <lastmod>2026-08-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- Book Appointment -->
-  <url>
-    <loc>https://www.drluma.com/#book</loc>
-    <lastmod>2026-08-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Disclosure / Legal -->
-  <url>
-    <loc>https://www.drluma.com/#disclosure</loc>
-    <lastmod>2026-08-25</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
-  </url>
-
 </urlset>

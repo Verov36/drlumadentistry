@@ -261,6 +261,8 @@ export default function App() {
   const [menuOpen,   setMenuOpen]   = useState(false);
   const [activeTab,  setActiveTab]  = useState<"cosmetic"|"preventive">("cosmetic");
   const [submitted,  setSubmitted]  = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [form, setForm] = useState({ name:"", phone:"", email:"", service:"", date:"", note:"" });
 
   const { reviews: liveReviews, loading: reviewsLoading, configured } = useReviews(6);
@@ -277,10 +279,28 @@ export default function App() {
     setForm(prev => ({ ...prev, [name]: value }));
   }, []);
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-  }, []);
+    if (submitting) return;
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await fetch("/api/book", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, website: "" /* honeypot */ }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Request failed (${res.status})`);
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setSubmitting(false);
+    }
+  }, [form, submitting]);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
@@ -308,13 +328,14 @@ export default function App() {
               <img
                 src={logoImg}
                 alt="Atlantic Dental Care — Dr. Evelyn E. Luma, DDS"
+                width={474} height={84}
                 style={{ height: 62, width: "auto", display: "block", objectFit: "contain", transition: "height 0.35s" }}
               />
             </div>
           </a>
 
           {/* Desktop links */}
-          <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }} className="hidden md:flex">
+          <div style={{ alignItems: "center", gap: "1.25rem" }} className="hidden md:flex">
             {navLinks.map(l => (
               <a key={l.label} href={l.href} style={{ color: scrolled ? "var(--mist)" : "rgba(255,255,255,0.72)", fontSize: 13, fontWeight: 500, textDecoration: "none", transition: "color 0.2s" }}
                 onMouseEnter={e => (e.currentTarget.style.color = scrolled ? "var(--ink)" : "#fff")}
@@ -400,7 +421,7 @@ export default function App() {
       <section className="hero" aria-label="Welcome to Atlantic Dental Care">
         <img
           src="https://images.unsplash.com/photo-1489278353717-f64c6ee8a4d2?w=1400&h=900&fit=crop&auto=format&crop=top"
-          alt="Photo placeholder — replace with practice or patient photo"
+          alt="Smiling patient at Atlantic Dental Care in Virginia Beach"
           className="hero-img"
           fetchPriority="high"
           decoding="async"
@@ -442,7 +463,7 @@ export default function App() {
           </div>
         </div>
 
-        <div style={{ position: "absolute", bottom: "1.5rem", left: "50%", transform: "translateX(-50%)", textAlign: "center" }} aria-hidden="true">
+        <div className="scroll-hint" style={{ position: "absolute", bottom: "1.5rem", left: "50%", transform: "translateX(-50%)", textAlign: "center" }} aria-hidden="true">
           <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase" }}>scroll</p>
           <div style={{ width: 1, height: 32, background: "rgba(255,255,255,0.18)", margin: "6px auto 0" }} />
         </div>
@@ -457,11 +478,11 @@ export default function App() {
             <PhilipsZoom />
             {/* Real ADA logo */}
             <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", border: "1px solid #d0ebc8", borderRadius: 6, padding: "0.5rem 0.875rem", background: "#f5fbf3" }}>
-              <img src={adaImg} alt="American Dental Association member" style={{ height: 48, width: "auto", objectFit: "contain" }} />
+              <img src={adaImg} alt="American Dental Association member" loading="lazy" decoding="async" style={{ height: 48, width: "auto", objectFit: "contain" }} />
             </div>
             {/* Real VDA logo */}
             <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", border: "1px solid #e8d0d0", borderRadius: 6, padding: "0.5rem 0.875rem", background: "#fdf5f5" }}>
-              <img src={vdaImg} alt="Virginia Dental Association member" style={{ height: 48, width: "auto", objectFit: "contain" }} />
+              <img src={vdaImg} alt="Virginia Dental Association member" loading="lazy" decoding="async" style={{ height: 48, width: "auto", objectFit: "contain" }} />
             </div>
           </div>
         </div>
@@ -566,6 +587,7 @@ export default function App() {
               <img
                 src={drLumaImg}
                 alt="Dr. Evelyn E. Luma, DDS — Atlantic Dental Care, Virginia Beach"
+                width={480} height={480} loading="lazy" decoding="async"
                 style={{ position: "relative", width: "100%", height: "clamp(320px,45vw,520px)", objectFit: "cover", objectPosition: "center top", display: "block", borderRadius: 2 }}
               />
               {/* Rating card */}
@@ -626,6 +648,7 @@ export default function App() {
               <img
                 src={drLumaImg}
                 alt="Dr. Evelyn E. Luma, DDS"
+                width={480} height={480} loading="lazy" decoding="async"
                 style={{ width: "100%", height: "100%", minHeight: 240, objectFit: "cover", objectPosition: "center top", display: "block" }}
               />
             </div>
@@ -709,7 +732,7 @@ export default function App() {
                   <img
                     src={img}
                     alt={`${label} before and after`}
-                    loading="lazy"
+                    loading="lazy" decoding="async"
                     style={{ width: "100%", height: "100%", objectFit: contain ? "contain" : "cover", objectPosition: contain ? "center" : "center top", display: "block" }}
                   />
                 </div>
@@ -1217,9 +1240,16 @@ export default function App() {
                     <textarea id="note" className="field" name="note" value={form.note} onChange={handleChange} rows={3} placeholder="Insurance questions, concerns, or anything else we should know…" style={{ resize: "none" }} />
                   </div>
 
-                  <button type="submit" className="btn-green" style={{ width: "100%", fontSize: 15, padding: "1.125rem" }}>
-                    Request My Appointment →
+                  <button type="submit" className="btn-green" disabled={submitting} style={{ width: "100%", fontSize: 15, padding: "1.125rem", opacity: submitting ? 0.7 : 1 }}>
+                    {submitting ? "Sending…" : "Request My Appointment →"}
                   </button>
+
+                  {submitError && (
+                    <p role="alert" style={{ fontSize: 13, color: "#b42318", textAlign: "center", marginTop: "0.875rem", lineHeight: 1.5 }}>
+                      We couldn't send your request online. Please call us at{" "}
+                      <a href={`tel:${PHONE}`} style={{ color: "#b42318", fontWeight: 700 }}>{PHONE}</a> and we'll get you scheduled.
+                    </p>
+                  )}
 
                   <p style={{ fontSize: 12, color: "var(--pebble)", textAlign: "center", marginTop: "1rem" }}>
                     Or call us at{" "}
