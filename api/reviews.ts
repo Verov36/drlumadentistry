@@ -31,6 +31,8 @@ export interface Review {
 
 // Places API (New) — https://developers.google.com/maps/documentation/places/web-service/place-details
 interface GooglePlacesResponse {
+  rating?: number;
+  userRatingCount?: number;
   reviews?: Array<{
     rating?: number;
     text?: { text?: string; languageCode?: string };
@@ -53,6 +55,7 @@ interface FacebookRatingsResponse {
 export default async function handler(): Promise<Response> {
   const reviews: Review[] = [];
   const errors: string[] = [];
+  let summary: { rating: number; count: number } | null = null;
 
   // ── Google Places ──────────────────────────────────────────
   const GOOGLE_KEY = process.env.GOOGLE_PLACES_API_KEY;
@@ -65,10 +68,14 @@ export default async function handler(): Promise<Response> {
       const res  = await fetch(url, {
         headers: {
           "X-Goog-Api-Key":   GOOGLE_KEY,
-          "X-Goog-FieldMask": "reviews",
+          "X-Goog-FieldMask": "rating,userRatingCount,reviews",
         },
       });
       const data = (await res.json()) as GooglePlacesResponse;
+
+      if (typeof data.rating === "number" && typeof data.userRatingCount === "number") {
+        summary = { rating: Math.round(data.rating * 10) / 10, count: data.userRatingCount };
+      }
 
       if (data.reviews) {
         data.reviews.forEach((r, i) => {
@@ -136,7 +143,7 @@ export default async function handler(): Promise<Response> {
   }
 
   return new Response(
-    JSON.stringify({ reviews, errors, configured: { google: !!(GOOGLE_KEY && PLACE_ID), facebook: !!(FB_PAGE_ID && FB_TOKEN) } }),
+    JSON.stringify({ reviews, errors, summary, configured: { google: !!(GOOGLE_KEY && PLACE_ID), facebook: !!(FB_PAGE_ID && FB_TOKEN) } }),
     {
       status: 200,
       headers: {

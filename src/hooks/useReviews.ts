@@ -16,6 +16,7 @@ export interface ReviewsState {
   loading: boolean;
   error: string | null;
   configured: { google: boolean; facebook: boolean };
+  summary: { rating: number; count: number } | null; // Google overall rating + total count
 }
 
 /** Fisher-Yates shuffle — returns a new array */
@@ -40,6 +41,7 @@ export function useReviews(count = 6): ReviewsState {
     loading: true,
     error: null,
     configured: { google: false, facebook: false },
+    summary: null,
   });
 
   useEffect(() => {
@@ -54,6 +56,7 @@ export function useReviews(count = 6): ReviewsState {
           reviews: Review[];
           errors: string[];
           configured: { google: boolean; facebook: boolean };
+          summary?: { rating: number; count: number } | null;
         };
 
         if (cancelled) return;
@@ -68,6 +71,7 @@ export function useReviews(count = 6): ReviewsState {
           loading: false,
           error: null,
           configured: data.configured ?? { google: false, facebook: false },
+          summary: data.summary ?? null,
         });
       } catch (err) {
         if (cancelled) return;

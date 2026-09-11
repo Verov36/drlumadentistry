@@ -16,7 +16,17 @@ const PHONE   = "757-430-2600";
 const FAX     = "757-460-2600";
 const EMAIL   = "dora@drluma.com";
 const ADDRESS = "1244 Perimeter Pkwy, Suite 444, Virginia Beach, VA 23454";
-const MAPS_URL = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(ADDRESS);
+/* Google Business Profile — "Dr. Evelyn E. Luma, DDS, PLC" */
+const GOOGLE_PLACE_ID  = "ChIJf_6--JTBuokRzP4vNAnSwwk";
+const GOOGLE_LISTING_URL = `https://www.google.com/maps/place/?q=place_id:${GOOGLE_PLACE_ID}`;
+const GOOGLE_WRITE_REVIEW_URL = `https://search.google.com/local/writereview?placeid=${GOOGLE_PLACE_ID}`;
+/* Shown until the live reviews API is configured; the API overrides these. */
+const GOOGLE_RATING_FALLBACK = 4.9;
+const GOOGLE_REVIEW_COUNT_FALLBACK = 543;
+/* Add the practice's Facebook Page URL to show the Facebook review button. */
+const FACEBOOK_PAGE_URL: string = "";
+
+const MAPS_URL = GOOGLE_LISTING_URL;
 const MAPS_EMBED_URL = "https://www.google.com/maps?q=" + encodeURIComponent(ADDRESS) + "&z=15&output=embed";
 
 /*
@@ -100,16 +110,6 @@ const galleryItems: GalleryItem[] = [
   { label: "Porcelain Bridges",          img: "https://images.unsplash.com/photo-1663182245833-7dd667277043?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" },
   { label: "Composite Fillings",         img: "https://images.unsplash.com/photo-1660732205525-eb180e4d29f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" },
   { label: "Invisalign Results",         img: "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" },
-];
-
-/* Fallback reviews shown while API loads or when keys aren't configured */
-const fallbackReviews: Review[] = [
-  { id: "f1", source: "google",   name: "Michelle T.", photo: null, rating: 5, time: 0, text: "I walked in self-conscious and walked out grinning. Dr. Luma is the most attentive dentist I've ever had — she explains every step and genuinely cares about your comfort." },
-  { id: "f2", source: "google",   name: "James R.",    photo: null, rating: 5, time: 0, text: "I had serious dental anxiety. Dr. Luma completely changed that. My Invisalign results are beyond what I imagined. Worth every single visit." },
-  { id: "f3", source: "google",   name: "Sandra K.",   photo: null, rating: 5, time: 0, text: "Zero wait time, zero surprises on the bill, and a team that actually listens. This is what dental care should feel like. I won't go anywhere else." },
-  { id: "f4", source: "facebook", name: "David M.",    photo: null, rating: 5, time: 0, text: "Switched to Dr. Luma two years ago and I couldn't be happier. The whole staff is wonderful and the office is immaculate. Highly recommend to anyone in Virginia Beach." },
-  { id: "f5", source: "google",   name: "Patricia W.", photo: null, rating: 5, time: 0, text: "Dr. Luma did my implants and the result is stunning. The process was explained clearly and I felt comfortable at every step. Best dental experience I've ever had." },
-  { id: "f6", source: "facebook", name: "Carlos R.",   photo: null, rating: 5, time: 0, text: "Mayleen made me feel so welcome as a Spanish speaker. The whole team is professional and kind. Dr. Luma is incredibly skilled and gentle. 10/10." },
 ];
 
 /* Source badge component */
@@ -293,8 +293,9 @@ export default function App() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [form, setForm] = useState({ name:"", phone:"", email:"", service:"", date:"", note:"" });
 
-  const { reviews: liveReviews, loading: reviewsLoading, configured } = useReviews(6);
-  const displayReviews = liveReviews.length > 0 ? liveReviews : fallbackReviews;
+  const { reviews: displayReviews, loading: reviewsLoading, configured, summary } = useReviews(6);
+  const googleRating = summary?.rating ?? GOOGLE_RATING_FALLBACK;
+  const googleReviewCount = summary?.count ?? GOOGLE_REVIEW_COUNT_FALLBACK;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -621,9 +622,9 @@ export default function App() {
               />
               {/* Rating card */}
               <div style={{ position: "absolute", bottom: -20, right: -16, background: "#fff", padding: "1.25rem 1.5rem", borderRadius: 2, boxShadow: "0 16px 48px rgba(0,0,0,0.28)", zIndex: 2 }}>
-                <p className="serif" style={{ fontSize: 30, color: "var(--green)", lineHeight: 1 }}>4.9★</p>
+                <p className="serif" style={{ fontSize: 30, color: "var(--green)", lineHeight: 1 }}>{googleRating}★</p>
                 <p style={{ fontSize: 10, color: "var(--mist)", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 3 }}>Google Rating</p>
-                <p style={{ fontSize: 11, color: "var(--pebble)", marginTop: 2 }}>200+ reviews</p>
+                <p style={{ fontSize: 11, color: "var(--pebble)", marginTop: 2 }}>{googleReviewCount.toLocaleString()} reviews</p>
               </div>
             </div>
 
@@ -835,7 +836,9 @@ export default function App() {
               {/* Sub-row: descriptor + call link */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem", paddingTop: "0.5rem", borderTop: "1px solid var(--line)" }}>
                 <p style={{ color: "var(--mist)", fontSize: 14, fontWeight: 300, maxWidth: 420, lineHeight: 1.6 }}>
-                  A new selection of reviews loads every time you visit — pulled live from Google and Facebook.
+                  {configured.google || configured.facebook
+                    ? "A new selection of reviews loads every time you visit — pulled live from Google and Facebook."
+                    : `Rated ${googleRating} out of 5 by ${googleReviewCount.toLocaleString()} patients on Google.`}
                 </p>
                 <a href={`tel:${PHONE}`} style={{ color: "var(--green)", fontWeight: 700, fontSize: 14, textDecoration: "none", letterSpacing: "0.04em", whiteSpace: "nowrap", borderBottom: "1px solid var(--green)", paddingBottom: 2 }}>
                   {PHONE}
@@ -858,8 +861,34 @@ export default function App() {
             </div>
           )}
 
-          {/* Live / fallback reviews */}
-          {!reviewsLoading && (
+          {/* No live reviews yet — link out to the real ones */}
+          {!reviewsLoading && displayReviews.length === 0 && (
+            <div className="google-summary">
+              <div>
+                <p className="serif" style={{ fontSize: "clamp(56px,8vw,96px)", lineHeight: 1, color: "var(--ink)", letterSpacing: "-0.03em" }}>{googleRating}</p>
+                <div style={{ display: "flex", gap: 3, margin: "0.5rem 0 0.375rem" }} aria-label={`${googleRating} out of 5 stars`}>
+                  {[1,2,3,4,5].map(star => <span key={star} style={{ fontSize: 22, color: "#f4b400" }}>★</span>)}
+                </div>
+                <p style={{ fontSize: 14, color: "var(--mist)", fontWeight: 300 }}>
+                  from <strong style={{ color: "var(--ink)", fontWeight: 700 }}>{googleReviewCount.toLocaleString()}</strong> Google reviews
+                </p>
+              </div>
+              <div>
+                <p className="serif" style={{ fontSize: "clamp(22px,2.5vw,30px)", color: "var(--ink)", lineHeight: 1.2, marginBottom: "1rem" }}>
+                  Hundreds of Virginia Beach families have shared their experience with Dr. Luma and the team.
+                </p>
+                <p style={{ fontSize: 15, color: "var(--mist)", lineHeight: 1.7, fontWeight: 300, marginBottom: "1.5rem" }}>
+                  Read what patients say about their visits — the kind staff, the welcoming atmosphere, and the care they receive — directly on our Google Business Profile.
+                </p>
+                <a href={GOOGLE_LISTING_URL} target="_blank" rel="noopener noreferrer" className="btn-green" style={{ display: "inline-block" }}>
+                  Read our reviews on Google →
+                </a>
+              </div>
+            </div>
+          )}
+
+          {/* Live reviews */}
+          {!reviewsLoading && displayReviews.length > 0 && (
             <div className="grid-3">
               {displayReviews.map((r, i) => (
                 <article
@@ -944,7 +973,7 @@ export default function App() {
           {/* Links to review profiles */}
           <div style={{ display: "flex", gap: "1rem", marginTop: "2.5rem", justifyContent: "center", flexWrap: "wrap" }}>
             <a
-              href="https://www.google.com/maps/search/Atlantic+Dental+Care+Virginia+Beach"
+              href={GOOGLE_WRITE_REVIEW_URL}
               target="_blank"
               rel="noopener noreferrer"
               style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--green)", fontWeight: 700, fontSize: 13, textDecoration: "none", border: "1px solid var(--green)", padding: "0.625rem 1.25rem", borderRadius: 2 }}
@@ -952,8 +981,9 @@ export default function App() {
               <svg width="14" height="14" viewBox="0 0 48 48"><path fill="#4285F4" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#34A853" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#EA4335" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.96 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
               Leave a Google Review
             </a>
+            {FACEBOOK_PAGE_URL && (
             <a
-              href="https://www.facebook.com/"
+              href={`${FACEBOOK_PAGE_URL.replace(/\/$/, "")}/reviews`}
               target="_blank"
               rel="noopener noreferrer"
               style={{ display: "flex", alignItems: "center", gap: 8, color: "#1877F2", fontWeight: 700, fontSize: 13, textDecoration: "none", border: "1px solid #1877F2", padding: "0.625rem 1.25rem", borderRadius: 2 }}
@@ -961,6 +991,7 @@ export default function App() {
               <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#1877F2" d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
               Leave a Facebook Review
             </a>
+            )}
           </div>
         </div>
       </section>

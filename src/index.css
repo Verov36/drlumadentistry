@@ -439,3 +439,11 @@ body { line-height: var(--a11y-lh, 1.5); letter-spacing: var(--a11y-ls, normal);
   /* keep the footer's last lines from hiding behind the bar */
   footer { padding-bottom: calc(2.25rem + 72px + env(safe-area-inset-bottom)) !important; }
 }
+
+/* ── Google rating summary (shown until live reviews are configured) ── */
+.google-summary {
+  display: grid; grid-template-columns: 1fr; gap: 2rem;
+  background: #fff; padding: clamp(2rem,4vw,3.5rem); border-radius: 2px;
+  border-left: 4px solid var(--green);
+}
+@media (min-width: 768px) { .google-summary { grid-template-columns: auto 1fr; gap: 4rem; align-items: center; } }
