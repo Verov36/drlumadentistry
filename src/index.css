@@ -378,4 +378,64 @@ body.a11y-sr :focus {
 body { line-height: var(--a11y-lh, 1.5); letter-spacing: var(--a11y-ls, normal); }
 
 /* ── Hero scroll hint: hide on phones (overlaps the stat grid) ─ */
-@media (max-width: 767px) { .scroll-hint { display: none; } }
+@media (max-width: 1023px) { .scroll-hint { display: none; } }
+
+/* ── Team monogram (shown until a photo is added) ─────────── */
+.monogram {
+  aspect-ratio: 1 / 1;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--green-light) 0%, #cfe9f1 100%);
+  color: var(--green-dark);
+}
+.monogram span {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(40px, 6vw, 56px);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+/* ── FAQ ──────────────────────────────────────────────────── */
+.faq-layout { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
+@media (min-width: 1024px) { .faq-layout { grid-template-columns: 1fr 1.6fr; gap: 5rem; align-items: start; } }
+.faq-list { border-top: 1px solid var(--line); }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-item summary {
+  list-style: none; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center; gap: 1.5rem;
+  padding: 1.25rem 0.25rem;
+  font-weight: 600; font-size: 16px; color: var(--ink); line-height: 1.4;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:hover { color: var(--green-dark); }
+.faq-icon {
+  flex: none; width: 28px; height: 28px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--green-light); color: var(--green); font-weight: 500; font-size: 18px;
+  transition: transform 0.25s, background 0.25s, color 0.25s;
+}
+.faq-item[open] .faq-icon { transform: rotate(45deg); background: var(--green); color: #fff; }
+.faq-item p { padding: 0 3rem 1.375rem 0.25rem; font-size: 15px; line-height: 1.7; color: var(--mist); font-weight: 300; }
+
+/* ── Mobile sticky call / book bar ────────────────────────── */
+.mobile-cta-bar {
+  display: none;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  gap: 0.5rem; padding: 0.625rem 0.75rem;
+  padding-bottom: calc(0.625rem + env(safe-area-inset-bottom));
+  background: rgba(255,255,255,0.96);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -8px 24px rgba(22,43,80,0.10);
+}
+.mobile-cta-call, .mobile-cta-book {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  min-height: 48px; border-radius: 2px;
+  font-weight: 700; font-size: 14px; letter-spacing: 0.02em; text-decoration: none;
+}
+.mobile-cta-call { flex: 0 0 auto; padding: 0 1.125rem; border: 1.5px solid var(--green); color: var(--green-dark); background: #fff; }
+.mobile-cta-book { flex: 1 1 auto; background: var(--green); color: #fff; }
+@media (max-width: 767px) {
+  .mobile-cta-bar { display: flex; }
+  /* keep the footer's last lines from hiding behind the bar */
+  footer { padding-bottom: calc(2.25rem + 72px + env(safe-area-inset-bottom)) !important; }
+}

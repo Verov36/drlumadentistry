@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useReviews } from "./hooks/useReviews";
+import { track } from "./analytics";
 import type { Review } from "./hooks/useReviews";
 import logoImg from "./imports/logo.jpeg";
 import adaImg from "./imports/ada.png";
@@ -15,6 +16,16 @@ const PHONE   = "757-430-2600";
 const FAX     = "757-460-2600";
 const EMAIL   = "dora@drluma.com";
 const ADDRESS = "1244 Perimeter Pkwy, Suite 444, Virginia Beach, VA 23454";
+const MAPS_URL = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(ADDRESS);
+const MAPS_EMBED_URL = "https://www.google.com/maps?q=" + encodeURIComponent(ADDRESS) + "&z=15&output=embed";
+
+/*
+ * HERO IMAGE — temporary stock photo. To use a real practice photo:
+ *   1. Save it as src/imports/hero.jpg (landscape, ~1600px wide, under 250 KB)
+ *   2. Add:  import heroImg from "./imports/hero.jpg";   and set HERO_IMAGE = heroImg
+ *   3. Update the <link rel="preload"> href in index.html to match (or remove it)
+ */
+const HERO_IMAGE = "https://images.unsplash.com/photo-1489278353717-f64c6ee8a4d2?w=1400&h=900&fit=crop&auto=format&crop=top";
 
 /* ── Data ─────────────────────────────────────────────────── */
 const navLinks = [
@@ -63,7 +74,14 @@ const preventiveServices = [
   { emoji: "◎", title: "Orthodontics",            desc: "Invisalign, retainers, and malocclusion correction. Straight teeth are healthier teeth for patients of all ages." },
 ];
 
-const team = [
+/*
+ * TEAM PHOTOS — add a `photo` to any member to replace the initials monogram:
+ *   import doraImg from "./imports/team/dora-scott.jpg";
+ *   { name: "Dora Scott", photo: doraImg, ... }
+ * Square crops (~600x600, under 120 KB) look best.
+ */
+type TeamMember = { name: string; role: string; bio: string; photo?: string };
+const team: TeamMember[] = [
   { name: "Dora Scott",        role: "Office Manager",                          bio: "Dora keeps Atlantic Dental Care running smoothly for every patient and provider. With decades of dental office experience, she ensures your visit is seamless from the moment you call to the moment you leave." },
   { name: "Michelle Boone",    role: "Front Office Coordinator",                bio: "Michelle is often the first friendly voice you hear when you contact our office. She handles patient communications, insurance questions, and helps make every experience welcoming and stress-free." },
   { name: "Amanda McBride",    role: "Front Office Agent & Scheduling Coordinator", bio: "Amanda specializes in keeping the schedule organized so patients are seen on time and get the appointments they need. She makes booking easy and works hard to accommodate your busy life." },
@@ -242,17 +260,27 @@ function switchLanguage(code: string) {
   }
 }
 
+const initials = (name: string) =>
+  name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]!.toUpperCase()).join("");
+
+/* Visible FAQ — keep in sync with the FAQPage JSON-LD in index.html */
+const faqs = [
+  { q: "Is Dr. Luma accepting new patients in Virginia Beach?",
+    a: "Yes! Atlantic Dental Care welcomes new patients. Call 757-430-2600 or book online. Same-day appointments are often available." },
+  { q: "What dental services does Atlantic Dental Care offer?",
+    a: "We offer dental implants, Invisalign, Philips Zoom whitening, porcelain crowns and bridges, composite fillings, dentures, BruxZir crowns, inlays and onlays, cleanings, exams, fluoride treatments, periodontal disease treatment, and more." },
+  { q: "Does Dr. Luma accept CareCredit?",
+    a: "Yes, Atlantic Dental Care accepts CareCredit financing, making it easy to get the care you need without delay." },
+  { q: "What are the office hours?",
+    a: "The office is open Monday through Thursday, 8:30 AM to 5:30 PM. The office is closed Friday through Sunday." },
+  { q: "Where is Atlantic Dental Care located?",
+    a: "We are located at 1244 Perimeter Pkwy, Suite 444, Virginia Beach, VA 23454." },
+];
+
 const steps = [
   { n: "01", title: "Book Online",  desc: "Fill out our quick form — takes 90 seconds." },
   { n: "02", title: "We Confirm",   desc: "Our team calls within one business day."       },
   { n: "03", title: "Come In",      desc: "Relax. We handle everything from there."       },
-];
-
-const resources = [
-  { cat: "General Dental",       links: ["American Dental Association","Academy of General Dentistry","Floss.com"] },
-  { cat: "Oral Health Products", links: ["Colgate","Sonicare"] },
-  { cat: "Cosmetic & Specialty", links: ["American Academy of Cosmetic Dentistry","American Academy of Periodontology","Zoom! Whitening"] },
-  { cat: "Children & Health",    links: ["AAPD — Pediatric Dentistry","Kids Health","WebMD","HealthScout"] },
 ];
 
 /* ── Component ────────────────────────────────────────────── */
@@ -295,6 +323,7 @@ export default function App() {
         throw new Error(data.error || `Request failed (${res.status})`);
       }
       setSubmitted(true);
+      track("generate_lead", { method: "booking_form", service: form.service });
     } catch (err) {
       setSubmitError(String(err instanceof Error ? err.message : err));
     } finally {
@@ -420,7 +449,7 @@ export default function App() {
       {/* ══ HERO ═════════════════════════════════════════════ */}
       <section className="hero" aria-label="Welcome to Atlantic Dental Care">
         <img
-          src="https://images.unsplash.com/photo-1489278353717-f64c6ee8a4d2?w=1400&h=900&fit=crop&auto=format&crop=top"
+          src={HERO_IMAGE}
           alt="Smiling patient at Atlantic Dental Care in Virginia Beach"
           className="hero-img"
           fetchPriority="high"
@@ -665,10 +694,18 @@ export default function App() {
           <div className="team-grid">
             {team.map(member => (
               <article key={member.name} style={{ background: "#fff", overflow: "hidden" }}>
-                <div style={{ height: 160, background: "var(--green-light)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderBottom: "2px dashed #d4ebe0" }}>
-                  <span style={{ fontSize: 28, opacity: 0.3 }}>📷</span>
-                  <p style={{ color: "var(--pebble)", fontSize: 11, marginTop: "0.5rem" }}>Photo placeholder</p>
-                </div>
+                {member.photo ? (
+                  <img
+                    src={member.photo}
+                    alt={`${member.name}, ${member.role}`}
+                    width={600} height={600} loading="lazy" decoding="async"
+                    style={{ width: "100%", aspectRatio: "1/1", objectFit: "cover", objectPosition: "center top", display: "block" }}
+                  />
+                ) : (
+                  <div className="monogram" aria-hidden="true">
+                    <span>{initials(member.name)}</span>
+                  </div>
+                )}
                 <div style={{ padding: "1.375rem 1.25rem" }}>
                   <p style={{ color: "var(--green)", fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 3 }}>{member.role}</p>
                   <h4 style={{ fontWeight: 700, fontSize: 15, color: "var(--ink)", marginBottom: "0.625rem" }}>{member.name}</h4>
@@ -1103,22 +1140,29 @@ export default function App() {
         </div>
       </section>
 
-      {/* ══ PATIENT RESOURCES ════════════════════════════════ */}
-      <section className="section-pad" style={{ background: "#fff" }}>
+      {/* ══ FAQ ═════════════════════════════════════════════ */}
+      <section id="faq" className="section-pad" style={{ background: "#fff" }} aria-label="Frequently asked questions">
         <div className="container">
-          <span className="tag">Patient Resources</span>
-          <h2 className="h-section" style={{ marginBottom: "2rem" }}>Helpful links for our patients</h2>
-          <div className="resources-grid">
-            {resources.map(group => (
-              <div key={group.cat} style={{ background: "var(--smoke)", padding: "1.625rem 1.375rem" }}>
-                <p style={{ color: "var(--green)", fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "0.875rem" }}>{group.cat}</p>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                  {group.links.map(link => (
-                    <p key={link} style={{ fontSize: 13, color: "var(--mist)", lineHeight: 1.5 }}>· {link}</p>
-                  ))}
-                </div>
-              </div>
-            ))}
+          <div className="faq-layout">
+            <div>
+              <span className="tag">Questions &amp; Answers</span>
+              <h2 className="h-section">Before you call,<br /><em style={{ color: "var(--green)" }}>the answers.</em></h2>
+              <p style={{ color: "var(--mist)", fontSize: 15, lineHeight: 1.7, fontWeight: 300, marginTop: "1rem", maxWidth: 380 }}>
+                Still have a question? Dora and the front office team are happy to help at{" "}
+                <a href={`tel:${PHONE}`} style={{ color: "var(--green)", fontWeight: 700, textDecoration: "none" }}>{PHONE}</a>.
+              </p>
+            </div>
+            <div className="faq-list">
+              {faqs.map(f => (
+                <details key={f.q} className="faq-item">
+                  <summary>
+                    <span>{f.q}</span>
+                    <span className="faq-icon" aria-hidden="true">+</span>
+                  </summary>
+                  <p>{f.a}</p>
+                </details>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -1149,6 +1193,15 @@ export default function App() {
               <div style={{ borderTop: "1px solid var(--line)", paddingTop: "1.375rem", marginBottom: "1.25rem" }}>
                 <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--pebble)", marginBottom: "0.625rem" }}>Location</p>
                 <p style={{ fontSize: 14, color: "var(--mist)", lineHeight: 1.7 }}>1244 Perimeter Pkwy, Suite 444<br />Virginia Beach, VA 23454</p>
+                <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", marginTop: "0.5rem", fontSize: 13, color: "var(--green)", fontWeight: 700, textDecoration: "none" }}>Get directions →</a>
+                <iframe
+                  title="Map to Atlantic Dental Care, 1244 Perimeter Pkwy Suite 444, Virginia Beach"
+                  src={MAPS_EMBED_URL}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                  style={{ display: "block", width: "100%", height: 190, border: 0, borderRadius: 2, marginTop: "0.875rem", filter: "saturate(0.85)" }}
+                />
               </div>
 
               <div style={{ borderTop: "1px solid var(--line)", paddingTop: "1.375rem", marginBottom: "1.375rem" }}>
@@ -1261,6 +1314,15 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      {/* ══ MOBILE STICKY CTA ═══════════════════════════════ */}
+      <div className="mobile-cta-bar" role="region" aria-label="Quick contact">
+        <a href={`tel:${PHONE}`} className="mobile-cta-call">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.7a2 2 0 0 1 1.7 2z"/></svg>
+          Call
+        </a>
+        <a href="#book" className="mobile-cta-book">Book an Appointment →</a>
+      </div>
 
       {/* ══ FOOTER ══════════════════════════════════════════ */}
       <footer style={{ background: "var(--ink)", padding: "3.5rem 0 2.25rem" }}>
