@@ -7,7 +7,6 @@ import adaImg from "./imports/ada.png";
 import vdaImg from "./imports/vda.jpeg";
 import drLumaImg from "./imports/Dr._Luma.jpeg";
 import porcelainCrownImg from "./imports/pic-porcelain-crown-before-after.jpg";
-import dentalImplantsImg from "./imports/implants2-2-scaled.jpg";
 import privacyPdf from "./imports/Notice_of_Privacy_Practices_2026.pdf?url";
 import grievanceDocx from "./imports/1557_notice_and_grievance_policy.docx?url";
 
@@ -102,14 +101,23 @@ const team: TeamMember[] = [
   { name: "Julia Alpert",      role: "Dental Assistant",                        bio: "Julia is committed to delivering a comfortable experience at every appointment. Her attentiveness and clinical support help Dr. Luma deliver the high-quality care our patients expect." },
 ];
 
-type GalleryItem = { label: string; img?: string; contain?: boolean };
+/*
+ * TREATMENT GALLERY
+ * Stock photos are Unsplash-licensed (free for commercial use, hotlinking is how
+ * Unsplash prefers to be used). Photographer credit kept here as a courtesy.
+ * To replace one with a real case photo: import the file, set `img` to it, and
+ * set `patient: true` so it earns the "Actual patient result" badge — only do
+ * that with signed photo consent on file.
+ */
+const unsplash = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&h=900&q=75`;
+type GalleryItem = { label: string; img: string; alt: string; patient?: boolean; contain?: boolean };
 const galleryItems: GalleryItem[] = [
-  { label: "Porcelain Crowns",           img: porcelainCrownImg },
-  { label: "Dental Implants",            img: dentalImplantsImg, contain: true },
-  { label: "Dentures & Partial Dentures",img: "https://images.unsplash.com/photo-1776400985210-92f654712d30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" },
-  { label: "Porcelain Bridges",          img: "https://images.unsplash.com/photo-1663182245833-7dd667277043?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" },
-  { label: "Composite Fillings",         img: "https://images.unsplash.com/photo-1660732205525-eb180e4d29f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" },
-  { label: "Invisalign Results",         img: "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" },
+  { label: "Dental Implants",     img: unsplash("photo-1777445826358-f95518f49b44"), alt: "Dentist demonstrating a dental implant on a dental model" },            // Harold Hisona
+  { label: "Porcelain Crowns",    img: porcelainCrownImg, patient: true, alt: "Porcelain crown before and after — actual Atlantic Dental Care patient" },
+  { label: "Composite Fillings",  img: unsplash("photo-1766338390573-ec092d69cdcb"), alt: "Dentist placing a filling with instruments and a curing light" },      // Roby Allario
+  { label: "Dentures & Partials", img: unsplash("photo-1525893277997-207c04d47d65"), alt: "Dental technician holding a finished full denture" },                  // Matthew Poetker
+  { label: "Invisalign®",         img: unsplash("photo-1609840114035-3c981b782dfe"), alt: "Person placing a clear Invisalign-style aligner over their teeth" },   // Diana Polekhina
+  { label: "Zoom! Whitening",     img: unsplash("photo-1684607632910-5afbe351a2cd"), alt: "Patient wearing protective glasses during an in-office whitening treatment" }, // Shedrack Salami
 ];
 
 /* Source badge component */
@@ -726,7 +734,7 @@ export default function App() {
       </section>
 
       {/* ══ SMILE GALLERY ════════════════════════════════════ */}
-      <section id="gallery" style={{ background: "var(--ink)", padding: "0" }} aria-label="Before and after smile gallery">
+      <section id="gallery" style={{ background: "var(--ink)", padding: "0" }} aria-label="Treatment gallery">
 
         {/* Header band — dark with oversized serif number */}
         <div style={{ borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "clamp(3rem,6vw,5rem) 0 0" }}>
@@ -735,9 +743,9 @@ export default function App() {
 
               {/* Top row: label + stat */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
-                <span className="tag" style={{ color: "var(--green-muted)" }}>Before &amp; After</span>
+                <span className="tag" style={{ color: "var(--green-muted)" }}>Our Treatments</span>
                 <div className="gal-stats">
-                  {[["6", "Procedures Shown"], ["1", "Virginia Beach Practice"]].map(([val, lbl]) => (
+                  {[[String(galleryItems.length), "Treatments Shown"], [googleReviewCount.toLocaleString(), "Google Reviews"]].map(([val, lbl]) => (
                     <div key={lbl} style={{ textAlign: "right" }}>
                       <p className="serif" style={{ color: "#fff", fontSize: "clamp(18px,2.5vw,24px)", lineHeight: 1 }}>{val}</p>
                       <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 3 }}>{lbl}</p>
@@ -761,33 +769,24 @@ export default function App() {
         </div>
 
         {/* Gallery grid — responsive */}
-        <div className="gal-grid" aria-label="Smile gallery">
-          {galleryItems.map(({ label, img, contain }, i) => (
+        <div className="gal-grid" aria-label="Treatment gallery">
+          {galleryItems.map(({ label, img, alt, patient, contain }, i) => (
             <div key={label} style={{ position: "relative", overflow: "hidden", background: i % 2 === 0 ? "#0e2244" : "#0a1c3a" }}>
-              {/* Image or placeholder */}
-              {img ? (
-                <div style={{ width: "100%", aspectRatio: "1/1", overflow: "hidden" }}>
-                  <img
-                    src={img}
-                    alt={`${label} before and after`}
-                    loading="lazy" decoding="async"
-                    style={{ width: "100%", height: "100%", objectFit: contain ? "contain" : "cover", objectPosition: contain ? "center" : "center top", display: "block" }}
-                  />
-                </div>
-              ) : (
-                <div
-                  className="gal-placeholder"
-                  style={{ height: "clamp(200px,28vw,280px)", background: "transparent", border: "none", borderRadius: 0 }}
-                  aria-label={`${label} before and after photo placeholder`}
-                >
-                  <span style={{ fontSize: 32, opacity: 0.2 }}>📷</span>
-                  <p style={{ color: "rgba(255,255,255,0.25)", fontSize: 12, fontWeight: 600, letterSpacing: "0.04em" }}>Photo Placeholder</p>
-                </div>
-              )}
+              <div style={{ width: "100%", aspectRatio: "1/1", overflow: "hidden" }}>
+                <img
+                  src={img}
+                  alt={alt}
+                  width={900} height={900}
+                  loading="lazy" decoding="async"
+                  style={{ width: "100%", height: "100%", objectFit: contain ? "contain" : "cover", objectPosition: contain ? "center" : "center top", display: "block" }}
+                />
+              </div>
               {/* Label */}
               <div style={{ padding: "1rem 1.25rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span style={{ color: "rgba(255,255,255,0.75)", fontSize: 13, fontWeight: 600 }}>{label}</span>
-                <span style={{ color: "var(--green)", fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>B&amp;A</span>
+                {patient && (
+                  <span style={{ color: "var(--green)", fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>Actual patient result</span>
+                )}
               </div>
             </div>
           ))}
@@ -796,7 +795,7 @@ export default function App() {
         {/* Footer note */}
         <div className="container" style={{ paddingBlock: "1.25rem", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
           <p style={{ color: "rgba(255,255,255,0.25)", fontSize: 11, fontStyle: "italic" }}>
-            Photos shown are of actual Atlantic Dental Care patients. Placeholders above will be replaced with real before &amp; after images.
+            Treatment photos are illustrative except where marked "Actual patient result." Individual results vary — ask about real case photos at your consultation.
           </p>
         </div>
       </section>
