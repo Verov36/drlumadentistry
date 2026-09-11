@@ -373,7 +373,7 @@ export default function App() {
           </a>
 
           {/* Desktop links */}
-          <div style={{ alignItems: "center", gap: "1.25rem" }} className="hidden md:flex">
+          <div style={{ alignItems: "center", gap: "1.25rem" }} className="hidden lg:flex">
             {navLinks.map(l => (
               <a key={l.label} href={l.href} style={{ color: scrolled ? "var(--mist)" : "rgba(255,255,255,0.72)", fontSize: 13, fontWeight: 500, textDecoration: "none", transition: "color 0.2s" }}
                 onMouseEnter={e => (e.currentTarget.style.color = scrolled ? "var(--ink)" : "#fff")}
@@ -422,7 +422,7 @@ export default function App() {
 
           {/* Mobile toggle */}
           <button
-            className="md:hidden"
+            className="lg:hidden"
             onClick={() => setMenuOpen(o => !o)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             style={{ background: "none", border: "none", fontSize: 22, color: scrolled ? "var(--ink)" : "#fff", cursor: "pointer", padding: "0.25rem", lineHeight: 1 }}
