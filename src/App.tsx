@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useReviews } from "./hooks/useReviews";
 import { track } from "./analytics";
+import { useScrollMotion, Cursor } from "./motion";
 import type { Review } from "./hooks/useReviews";
 import logoImg from "./imports/logo.jpeg";
 import adaImg from "./imports/ada.png";
@@ -310,6 +311,17 @@ export default function App() {
   const [scrolled,   setScrolled]   = useState(false);
   const [menuOpen,   setMenuOpen]   = useState(false);
   const [activeTab,  setActiveTab]  = useState<"cosmetic"|"preventive">("cosmetic");
+  const [lightbox,   setLightbox]   = useState<GalleryItem | null>(null);
+
+  useScrollMotion();
+
+  // Close the gallery lightbox on Escape
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setLightbox(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox]);
   const [submitted,  setSubmitted]  = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -398,6 +410,17 @@ export default function App() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#fff", color: "var(--ink)", overflowX: "hidden" }}>
+      <Cursor />
+
+      {lightbox && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label={lightbox.label} onClick={() => setLightbox(null)} data-lenis-prevent>
+          <img src={lightbox.img} alt={lightbox.alt} onClick={e => e.stopPropagation()} />
+          <button type="button" className="lightbox-close" aria-label="Close" onClick={() => setLightbox(null)}>✕</button>
+          <p className="lightbox-caption">
+            {lightbox.label}{lightbox.patient ? " · Actual patient result" : " · Illustrative photo"}
+          </p>
+        </div>
+      )}
 
       {/* ══ NAV ══════════════════════════════════════════════ */}
       <nav
@@ -589,7 +612,7 @@ export default function App() {
           <p className="tag" style={{ color: "rgba(255,255,255,0.45)", textAlign: "center", marginBottom: "2.5rem" }}>Our Practice Philosophy</p>
           <div className="pillars-grid">
             {pillars.map((p, i) => (
-              <div key={p.title} style={{ background: i % 2 === 0 ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.04)", padding: "2rem 1.75rem" }}>
+              <div key={p.title} className="rv" style={{ ...motionDelay(i * 0.08), background: i % 2 === 0 ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.04)", padding: "2rem 1.75rem" }}>
                 <h3 className="serif" style={{ color: "#fff", fontSize: "clamp(17px,1.8vw,21px)", marginBottom: "0.75rem" }}>{p.title}</h3>
                 <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 13, lineHeight: 1.7, fontWeight: 300 }}>{p.desc}</p>
               </div>
@@ -631,8 +654,8 @@ export default function App() {
           </div>
 
           <div className="grid-4">
-            {(activeTab === "cosmetic" ? cosmeticServices : preventiveServices).map(svc => (
-              <article key={svc.title} className="svc-card">
+            {(activeTab === "cosmetic" ? cosmeticServices : preventiveServices).map((svc, i) => (
+              <article key={svc.title} className="svc-card rv" style={motionDelay(i * 0.06)}>
                 <span style={{ fontSize: 20, color: "var(--green)", display: "block", marginBottom: "0.875rem" }}>{svc.emoji}</span>
                 <h3 style={{ fontWeight: 700, fontSize: 14, color: "var(--ink)", marginBottom: "0.5rem" }}>{svc.title}</h3>
                 <p style={{ fontSize: 13, color: "var(--mist)", lineHeight: 1.65, fontWeight: 300, marginBottom: "0.875rem" }}>{svc.desc}</p>
@@ -662,8 +685,8 @@ export default function App() {
               </p>
             </div>
             <div className="tech-grid">
-              {technology.map(t => (
-                <article key={t.title} className="tech-card">
+              {technology.map((t, i) => (
+                <article key={t.title} className="tech-card rv" style={motionDelay(0.15 + i * 0.1)}>
                   <span aria-hidden="true" style={{ fontSize: 22, color: "var(--green-muted)", display: "block", marginBottom: "0.875rem" }}>{t.emoji}</span>
                   <h3 className="serif" style={{ fontSize: "clamp(18px,2vw,22px)", color: "#fff", marginBottom: "0.5rem" }}>{t.title}</h3>
                   <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.7, fontWeight: 300 }}>{t.desc}</p>
@@ -686,7 +709,7 @@ export default function App() {
           </div>
           <div className="steps-grid">
             {steps.map((step, i) => (
-              <div key={step.n} style={{ background: i === 1 ? "var(--green)" : "var(--smoke)", padding: "clamp(2rem,4vw,3.25rem) clamp(1.5rem,3vw,2.5rem)", position: "relative" }}>
+              <div key={step.n} className="rv" style={{ ...motionDelay(i * 0.1), background: i === 1 ? "var(--green)" : "var(--smoke)", padding: "clamp(2rem,4vw,3.25rem) clamp(1.5rem,3vw,2.5rem)", position: "relative" }}>
                 <span className="serif" style={{ fontSize: "clamp(56px,7vw,80px)", color: i === 1 ? "rgba(255,255,255,0.1)" : "#e8e3dc", lineHeight: 1, display: "block", marginBottom: "1.25rem" }}>{step.n}</span>
                 <h3 className="serif" style={{ fontSize: "clamp(20px,2.5vw,26px)", color: i === 1 ? "#fff" : "var(--ink)", marginBottom: "0.625rem" }}>{step.title}</h3>
                 <p style={{ fontSize: 15, color: i === 1 ? "rgba(255,255,255,0.62)" : "var(--mist)", lineHeight: 1.6, fontWeight: 300 }}>{step.desc}</p>
@@ -706,12 +729,14 @@ export default function App() {
             {/* Photo placeholder */}
             <div style={{ position: "relative" }}>
               <div style={{ background: "var(--green-dark)", position: "absolute", top: -12, left: -12, right: "2rem", bottom: "2rem", borderRadius: 2 }} aria-hidden="true" />
-              <img
-                src={drLumaImg}
-                alt="Dr. Evelyn E. Luma, DDS — Atlantic Dental Care, Virginia Beach"
-                width={480} height={480} loading="lazy" decoding="async"
-                style={{ position: "relative", width: "100%", height: "clamp(320px,45vw,520px)", objectFit: "cover", objectPosition: "center top", display: "block", borderRadius: 2 }}
-              />
+              <div className="pw" style={{ position: "relative", height: "clamp(320px,45vw,520px)", borderRadius: 2 }}>
+                <img
+                  src={drLumaImg}
+                  alt="Dr. Evelyn E. Luma, DDS — Atlantic Dental Care, Virginia Beach"
+                  width={480} height={480} loading="lazy" decoding="async"
+                  style={{ objectFit: "cover", objectPosition: "center top" }}
+                />
+              </div>
               {/* Rating card */}
               <div style={{ position: "absolute", bottom: -20, right: -16, background: "#fff", padding: "1.25rem 1.5rem", borderRadius: 2, boxShadow: "0 16px 48px rgba(0,0,0,0.28)", zIndex: 2 }}>
                 <p className="serif" style={{ fontSize: 30, color: "var(--green)", lineHeight: 1 }}>{googleRating}★</p>
@@ -765,13 +790,13 @@ export default function App() {
           </div>
 
           {/* Dr. Luma featured */}
-          <div className="team-featured" style={{ background: "var(--green)", marginBottom: 2, borderRadius: 2, overflow: "hidden" }}>
-            <div style={{ minHeight: 240, overflow: "hidden" }}>
+          <div className="team-featured rv" style={{ background: "var(--green)", marginBottom: 2, borderRadius: 2, overflow: "hidden" }}>
+            <div className="pw" data-amp="0.6" style={{ minHeight: 240 }}>
               <img
                 src={drLumaImg}
                 alt="Dr. Evelyn E. Luma, DDS"
                 width={480} height={480} loading="lazy" decoding="async"
-                style={{ width: "100%", height: "100%", minHeight: 240, objectFit: "cover", objectPosition: "center top", display: "block" }}
+                style={{ minHeight: 240, objectFit: "cover", objectPosition: "center top" }}
               />
             </div>
             <div style={{ padding: "2.25rem 2.5rem" }}>
@@ -785,15 +810,17 @@ export default function App() {
 
           {/* Rest of team */}
           <div className="team-grid">
-            {team.map(member => (
-              <article key={member.name} style={{ background: "#fff", overflow: "hidden" }}>
+            {team.map((member, i) => (
+              <article key={member.name} className="rv" style={{ ...motionDelay((i % 4) * 0.08), background: "#fff", overflow: "hidden" }}>
                 {member.photo ? (
-                  <img
-                    src={member.photo}
-                    alt={`${member.name}, ${member.role}`}
-                    width={600} height={600} loading="lazy" decoding="async"
-                    style={{ width: "100%", aspectRatio: "1/1", objectFit: "cover", objectPosition: "center top", display: "block" }}
-                  />
+                  <div className="pw" data-amp="0.6" style={{ aspectRatio: "1/1" }}>
+                    <img
+                      src={member.photo}
+                      alt={`${member.name}, ${member.role}`}
+                      width={600} height={600} loading="lazy" decoding="async"
+                      style={{ objectFit: "cover", objectPosition: "center top" }}
+                    />
+                  </div>
                 ) : (
                   <div className="monogram" aria-hidden="true">
                     <span>{initials(member.name)}</span>
@@ -854,15 +881,26 @@ export default function App() {
 
         {/* Gallery grid — responsive */}
         <div className="gal-grid" aria-label="Treatment gallery">
-          {galleryItems.map(({ label, img, alt, patient, contain }, i) => (
-            <div key={label} style={{ position: "relative", overflow: "hidden", background: i % 2 === 0 ? "#0e2244" : "#0a1c3a" }}>
-              <div style={{ width: "100%", aspectRatio: "1/1", overflow: "hidden" }}>
+          {galleryItems.map((item, i) => {
+            const { label, img, alt, patient, contain } = item;
+            return (
+            <div
+              key={label}
+              className="rv gal-tile"
+              role="button" tabIndex={0}
+              aria-label={`View larger: ${label}`}
+              data-cursor="view"
+              onClick={() => setLightbox(item)}
+              onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setLightbox(item); } }}
+              style={{ ...motionDelay((i % 3) * 0.1), position: "relative", overflow: "hidden", background: i % 2 === 0 ? "#0e2244" : "#0a1c3a" }}
+            >
+              <div className="pw" data-amp={contain ? "0.35" : "1"} style={{ width: "100%", aspectRatio: "1/1" }}>
                 <img
                   src={img}
                   alt={alt}
                   width={900} height={900}
                   loading="lazy" decoding="async"
-                  style={{ width: "100%", height: "100%", objectFit: contain ? "contain" : "cover", objectPosition: contain ? "center" : "center top", display: "block" }}
+                  style={{ objectFit: contain ? "contain" : "cover", objectPosition: contain ? "center" : "center top" }}
                 />
               </div>
               {/* Label */}
@@ -873,7 +911,8 @@ export default function App() {
                 )}
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Footer note */}
@@ -976,7 +1015,9 @@ export default function App() {
               {displayReviews.map((r, i) => (
                 <article
                   key={r.id}
+                  className="rv"
                   style={{
+                    ...motionDelay((i % 3) * 0.1),
                     background: i === 0 ? "var(--green)" : "#fff",
                     padding: "clamp(1.75rem,3vw,3rem) clamp(1.5rem,2.5vw,2.25rem)",
                     display: "flex", flexDirection: "column",
@@ -1267,8 +1308,8 @@ export default function App() {
               </p>
             </div>
             <div className="faq-list">
-              {faqs.map(f => (
-                <details key={f.q} className="faq-item">
+              {faqs.map((f, i) => (
+                <details key={f.q} className="faq-item rv" style={motionDelay(i * 0.06)}>
                   <summary>
                     <span>{f.q}</span>
                     <span className="faq-icon" aria-hidden="true">+</span>
