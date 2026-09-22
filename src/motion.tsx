@@ -32,7 +32,7 @@ export function useScrollMotion() {
 
     // 1. Smooth scroll. Native touch scrolling is left alone (Lenis default).
     //    Anchor links get the eased scroll too, offset for the fixed nav.
-    const lenis = new Lenis({ autoRaf: true, lerp: 0.1, anchors: { offset: -88 } });
+    const lenis = new Lenis({ autoRaf: true, lerp: 0.07, anchors: { offset: -88 } });
 
     // 2. Reveal-on-enter. A MutationObserver picks up cards that mount later
     //    (service tab switches, reviews arriving from the API).
@@ -66,9 +66,11 @@ export function useScrollMotion() {
         if (r.bottom < -80 || r.top > vh + 80) return;
         const amp = parseFloat(frame.dataset.amp ?? "1");
         const p = clamp01((vh - r.top) / (vh + r.height));
-        const y = (0.5 - p) * 14 * amp;          // +7% → -7% of the image height
-        const s = 1 + 0.15 * amp;                // headroom so the slide never shows an edge
-        img.style.transform = `translate3d(0, ${y.toFixed(2)}%, 0) scale(${s.toFixed(3)})`;
+        const y = (0.5 - p) * 22 * amp;          // +11% → -11% of the image height
+        const s = 1 + 0.22 * amp;                // headroom so the slide never shows an edge
+        // Written as custom properties so CSS can layer a hover zoom on top (see .pw in index.css)
+        img.style.setProperty("--py", `${y.toFixed(2)}%`);
+        img.style.setProperty("--ps", s.toFixed(3));
       });
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };

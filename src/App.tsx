@@ -9,6 +9,12 @@ import vdaImg from "./imports/vda.jpeg";
 import drLumaImg from "./imports/Dr._Luma.jpeg";
 import porcelainCrownImg from "./imports/pic-porcelain-crown-before-after.jpg";
 import implantRestorationImg from "./imports/implants2-2-scaled.jpg";
+import invisalignProviderImg from "./imports/invisalign-provider.png";
+import careCreditImg from "./imports/carecredit.png";
+import philipsZoomImg from "./imports/philips-zoom.jpg";
+import iteroWandImg from "./imports/itero-lumina-wand.jpg";
+import invisalignSmileImg from "./imports/invisalign-smile.jpg";
+import viveraImg from "./imports/vivera-provider.jpg";
 import privacyPdf from "./imports/Notice_of_Privacy_Practices_2026.pdf?url";
 import grievanceDocx from "./imports/1557_notice_and_grievance_policy.docx?url";
 
@@ -82,7 +88,7 @@ const preventiveServices = [
   { emoji: "◇", title: "Digital X-Rays",          desc: "Low-radiation digital imaging with instant results. Full-mouth series for new patients; annual or biannual bite-wings detect decay, bone loss, abscesses, and more." },
   { emoji: "▲", title: "Fluoride Treatments",     desc: "Dr. Luma recommends fluoride for all of her patients, not just children. Topical and systemic treatments strengthen enamel and guard against decay — especially for exposed roots or high decay risk." },
   { emoji: "⊕", title: "Periodontal Disease Care",desc: "Diagnosis, treatment, and long-term maintenance for gum disease. We address the mouth-body connection: diabetes, heart disease, and more." },
-  { emoji: "◎", title: "Orthodontics",            desc: "Invisalign, retainers, and malocclusion correction. Straight teeth are healthier teeth for patients of all ages." },
+  { emoji: "◎", title: "Orthodontics",            desc: "Invisalign®, Vivera™ retainers, and malocclusion correction. Straight teeth are healthier teeth for patients of all ages." },
 ];
 
 /*
@@ -165,54 +171,31 @@ function TrustBadge({ accent, bg, border, children }: {
   );
 }
 
-/* Invisalign Provider */
+/* Invisalign Provider — official logo supplied by the practice */
 function InvisalignBadge({ dark = false }: { dark?: boolean }) {
-  const blue = "#009CDE";
   return (
-    <TrustBadge accent={blue} bg={dark ? "rgba(0,156,222,0.08)" : "#f0f9fe"} border={dark ? "rgba(0,156,222,0.22)" : "#b8dff2"}>
-      <svg viewBox="0 0 108 20" width="108" height="20" aria-label="Invisalign">
-        <text x="54" y="16" textAnchor="middle" fontFamily="'Outfit',system-ui,sans-serif" fontSize="17" fontWeight="700" letterSpacing="-0.4" fill={blue}>invisalign</text>
-      </svg>
-      <span style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.22em", textTransform: "uppercase", color: dark ? "rgba(0,156,222,0.55)" : "#4a8fa8", lineHeight: 1 }}>Provider</span>
+    <TrustBadge accent="#009CDE" bg={dark ? "#fff" : "#f4f9fc"} border={dark ? "rgba(255,255,255,0.2)" : "#cfe3ee"}>
+      <img src={invisalignProviderImg} alt="Invisalign Provider" width={992} height={257} loading="lazy" decoding="async" style={{ height: 30, width: "auto", display: "block" }} />
     </TrustBadge>
   );
 }
 
-/* CareCredit */
+/* CareCredit — official logo */
 function CareCredit({ dark = false }: { dark?: boolean }) {
   return (
-    <TrustBadge accent="#003087" bg={dark ? "rgba(0,48,135,0.08)" : "#f0f4ff"} border={dark ? "rgba(0,48,135,0.22)" : "#c2cef5"}>
-      <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-        {/* Heart icon */}
-        <svg width="16" height="14" viewBox="0 0 24 22" fill="none" aria-hidden="true">
-          <path d="M12 20S2 13 2 6.5A5.5 5.5 0 0 1 12 4.1 5.5 5.5 0 0 1 22 6.5C22 13 12 20 12 20z" fill="#00A651"/>
-        </svg>
-        <svg viewBox="0 0 86 18" width="86" height="18" aria-label="CareCredit">
-          <text x="0" y="14" fontFamily="'Outfit',system-ui,sans-serif" fontSize="15" fontWeight="700" fill="#003087">CareCredit</text>
-        </svg>
-      </div>
-      <span style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.22em", textTransform: "uppercase", color: dark ? "rgba(0,48,135,0.5)" : "#6678b0", lineHeight: 1 }}>Accepted</span>
+    <TrustBadge accent="#00704a" bg={dark ? "#fff" : "#f2faf6"} border={dark ? "rgba(255,255,255,0.2)" : "#c6e6d6"}>
+      <img src={careCreditImg} alt="CareCredit" width={710} height={97} loading="lazy" decoding="async" style={{ height: 22, width: "auto", display: "block" }} />
+      <span style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.22em", textTransform: "uppercase", color: "#4d8a6c", lineHeight: 1 }}>Accepted</span>
     </TrustBadge>
   );
 }
 
-/* Philips Zoom! */
+/* Philips Zoom! — official logo */
 function PhilipsZoom({ dark = false }: { dark?: boolean }) {
-  const blue = "#0045A0";
   return (
-    <TrustBadge accent={blue} bg={dark ? "rgba(0,69,160,0.08)" : "#f0f4ff"} border={dark ? "rgba(0,69,160,0.22)" : "#b8caef"}>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-        {/* Philips shield waves */}
-        <svg width="24" height="12" viewBox="0 0 36 18" fill="none" aria-hidden="true">
-          <ellipse cx="6"  cy="9" rx="5" ry="8" fill={blue}/>
-          <ellipse cx="18" cy="9" rx="5" ry="8" fill={blue} opacity="0.65"/>
-          <ellipse cx="30" cy="9" rx="5" ry="8" fill={blue} opacity="0.35"/>
-        </svg>
-        <svg viewBox="0 0 92 18" width="92" height="18" aria-label="Philips Zoom!">
-          <text x="46" y="14" textAnchor="middle" fontFamily="'Outfit',system-ui,sans-serif" fontSize="15" fontWeight="700" fill={blue}>Philips Zoom!</text>
-        </svg>
-      </div>
-      <span style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.22em", textTransform: "uppercase", color: dark ? "rgba(0,69,160,0.5)" : "#5070a8", lineHeight: 1 }}>Certified</span>
+    <TrustBadge accent="#0045A0" bg={dark ? "#fff" : "#f0f4ff"} border={dark ? "rgba(255,255,255,0.2)" : "#b8caef"}>
+      <img src={philipsZoomImg} alt="Philips Zoom! whitening" width={400} height={400} loading="lazy" decoding="async" style={{ height: 40, width: "auto", display: "block", mixBlendMode: "multiply" }} />
+      <span style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.22em", textTransform: "uppercase", color: "#5070a8", lineHeight: 1 }}>Certified</span>
     </TrustBadge>
   );
 }
@@ -276,6 +259,54 @@ const initials = (name: string) =>
 /* Stagger delay for the hero's load-in animations (see .reveal-item / .fade-up in index.css) */
 const motionDelay = (seconds: number) => ({ "--d": `${seconds}s` } as React.CSSProperties);
 
+/* Section headings: each line rises out of its own clipping mask when scrolled into view */
+function SplitLines({ lines, base = 0 }: { lines: React.ReactNode[]; base?: number }) {
+  return (
+    <span className="rv lines">
+      {lines.map((line, i) => (
+        <span key={i} className="ln"><span className="ln-i" style={motionDelay(base + i * 0.12)}>{line}</span></span>
+      ))}
+    </span>
+  );
+}
+
+/* Hero stat that counts up from zero on load (only when the value starts with a number) */
+function Stat({ value, label, delay }: { value: string; label: string; delay: number }) {
+  const m = value.match(/^([\d,]*\.?\d+)(.*)$/);
+  const target = m ? parseFloat(m[1]!.replace(/,/g, "")) : NaN;
+  const suffix = m ? m[2]! : "";
+  const decimals = m && m[1]!.includes(".") ? 1 : 0;
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (Number.isNaN(target)) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setN(target); return; }
+    let raf = 0;
+    const start = performance.now() + delay * 1000;
+    const tick = (t: number) => {
+      const p = Math.min(1, Math.max(0, (t - start) / 1400));
+      setN(target * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, delay]);
+  const shown = Number.isNaN(target)
+    ? value
+    : n.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
+  return (
+    <div>
+      <p className="serif" style={{ color: "#fff", fontSize: "clamp(20px,3vw,28px)" }}>{shown}</p>
+      <p style={{ color: "rgba(255,255,255,0.48)", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 3 }}>{label}</p>
+    </div>
+  );
+}
+
+const tickerItems = [
+  "Dental Implant Restoration", "Invisalign® Provider", "Philips Zoom! Whitening", "Laser Dentistry",
+  "Digital X-Rays", "iTero™ 3D Scanning", "Same-Day Emergency Care", "Se habla español",
+  "CareCredit Accepted", "25 Years of Experience",
+];
+
 /* Visible FAQ — keep in sync with the FAQPage JSON-LD in index.html */
 const faqs = [
   { q: "Is Dr. Luma accepting new patients in Virginia Beach?",
@@ -298,6 +329,7 @@ const technology = [
   { emoji: "✧", title: "Laser Treatments",  desc: "Precise, gentle laser dentistry for soft-tissue procedures — less bleeding, less discomfort, and faster healing than traditional methods." },
   { emoji: "◫", title: "Digital X-Rays",    desc: "Instant, high-resolution images with a fraction of the radiation of film x-rays — easy to enlarge and review together chairside." },
   { emoji: "◉", title: "Intraoral Cameras", desc: "A tiny camera shows you exactly what our team sees inside your mouth, on screen, in real time — so you understand every recommendation." },
+  { emoji: "◈", title: "iTero™ Lumina 3D Scanner", desc: "Digital impressions in minutes with a small wand instead of goopy trays. The scan builds a 3D model of your teeth and drives your Invisalign® plan." },
 ];
 
 const steps = [
@@ -571,11 +603,8 @@ export default function App() {
             </div>
 
             <div className="stats-row fade-up" style={motionDelay(0.9)}>
-              {stats.map(s => (
-                <div key={s.label}>
-                  <p className="serif" style={{ color: "#fff", fontSize: "clamp(20px,3vw,28px)" }}>{s.value}</p>
-                  <p style={{ color: "rgba(255,255,255,0.48)", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 3 }}>{s.label}</p>
-                </div>
+              {stats.map((s, i) => (
+                <Stat key={s.label} value={s.value} label={s.label} delay={1 + i * 0.12} />
               ))}
             </div>
           </div>
@@ -586,6 +615,17 @@ export default function App() {
           <div style={{ width: 1, height: 32, background: "rgba(255,255,255,0.18)", margin: "6px auto 0" }} />
         </div>
       </section>
+
+      {/* ══ TICKER — slow continuous strip of what we do ═══ */}
+      <div className="ticker" aria-hidden="true">
+        <div className="ticker-track">
+          {[0, 1].map(k => (
+            <div key={k} className="ticker-run">
+              {tickerItems.map(t => <span key={t}>{t}<i /></span>)}
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* ══ TRUST BADGES — certifications and affiliations ══ */}
       <section style={{ background: "#fff", borderBottom: "1px solid var(--line)", padding: "1.5rem 0" }} aria-label="Certifications and affiliations">
@@ -629,8 +669,7 @@ export default function App() {
             <div className="md:col-span-1">
               <span className="tag">Our Services — Virginia Beach, VA</span>
               <h2 className="h-section">
-                Everything your<br />
-                <em style={{ color: "var(--green)" }}>smile needs</em>
+                <SplitLines lines={["Everything your", <em key="e" style={{ color: "var(--green)" }}>smile needs</em>]} />
               </h2>
             </div>
             <p style={{ color: "var(--mist)", fontSize: "clamp(14px,1.5vw,16px)", lineHeight: 1.7, fontWeight: 300 }}>
@@ -677,12 +716,14 @@ export default function App() {
             <div>
               <span className="tag" style={{ color: "var(--green-muted)" }}>Modern Technology</span>
               <h2 className="serif" style={{ fontSize: "clamp(32px,4vw,54px)", color: "#fff", lineHeight: 1.08, letterSpacing: "-0.03em", marginBottom: "1.25rem" }}>
-                High-tech care,<br />
-                <em style={{ color: "var(--green-muted)" }}>human touch.</em>
+                <SplitLines lines={["High-tech care,", <em key="e" style={{ color: "var(--green-muted)" }}>human touch.</em>]} />
               </h2>
-              <p style={{ color: "rgba(255,255,255,0.56)", fontSize: "clamp(14px,1.5vw,16px)", lineHeight: 1.75, fontWeight: 300, maxWidth: 440 }}>
+              <p className="rv" style={{ ...motionDelay(0.2), color: "rgba(255,255,255,0.56)", fontSize: "clamp(14px,1.5vw,16px)", lineHeight: 1.75, fontWeight: 300, maxWidth: 440 }}>
                 Dr. Luma invests in the tools that make dentistry more accurate, more comfortable, and easier to understand — so you see what we see and know exactly what's happening with your smile.
               </p>
+              <div className="pw tech-photo rv" data-amp="0.7" style={motionDelay(0.3)}>
+                <img src={iteroWandImg} alt="iTero Lumina intraoral scanner wand" width={1400} height={785} loading="lazy" decoding="async" style={{ objectFit: "cover", objectPosition: "center" }} />
+              </div>
             </div>
             <div className="tech-grid">
               {technology.map((t, i) => (
@@ -703,8 +744,7 @@ export default function App() {
           <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
             <span className="tag">It's Simple</span>
             <h2 className="h-section">
-              Your first visit in<br />
-              <em style={{ color: "var(--green)" }}>3 easy steps</em>
+              <SplitLines lines={["Your first visit in", <em key="e" style={{ color: "var(--green)" }}>3 easy steps</em>]} />
             </h2>
           </div>
           <div className="steps-grid">
@@ -749,8 +789,7 @@ export default function App() {
             <div style={{ paddingTop: "1rem" }}>
               <span className="tag" style={{ color: "var(--green-muted)" }}>Meet Your Doctor</span>
               <h2 className="serif" style={{ fontSize: "clamp(32px,4vw,54px)", color: "#fff", lineHeight: 1.08, letterSpacing: "-0.03em", marginBottom: "1.25rem" }}>
-                Dr. Evelyn E. Luma,<br />
-                <em style={{ color: "var(--green-muted)" }}>DDS</em>
+                <SplitLines lines={["Dr. Evelyn E. Luma,", <em key="e" style={{ color: "var(--green-muted)" }}>DDS</em>]} />
               </h2>
 
               <p style={{ color: "rgba(255,255,255,0.52)", fontSize: 15, lineHeight: 1.8, fontWeight: 300, marginBottom: "0.875rem" }}>
@@ -784,8 +823,7 @@ export default function App() {
           <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
             <span className="tag">Meet Our Team</span>
             <h2 className="h-section">
-              Experienced. Caring.<br />
-              <em style={{ color: "var(--green)" }}>All yours.</em>
+              <SplitLines lines={["Experienced. Caring.", <em key="e" style={{ color: "var(--green)" }}>All yours.</em>]} />
             </h2>
           </div>
 
@@ -868,8 +906,7 @@ export default function App() {
               {/* Big headline */}
               <div className="gal-headline-row">
                 <h2 className="serif" style={{ fontSize: "clamp(38px,6vw,80px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-0.03em", maxWidth: 700 }}>
-                  See what's possible<br />
-                  <em style={{ color: "var(--green-muted)" }}>at our practice.</em>
+                  <SplitLines lines={["See what's possible", <em key="e" style={{ color: "var(--green-muted)" }}>at our practice.</em>]} />
                 </h2>
                 <a href="#book" className="btn-green" style={{ flexShrink: 0, alignSelf: "flex-end" }}>
                   Book a Consultation →
@@ -923,6 +960,37 @@ export default function App() {
         </div>
       </section>
 
+      {/* ══ INVISALIGN PROMO ═══════════════════════════════ */}
+      <section id="invisalign" className="section-pad" style={{ background: "var(--green-light)" }} aria-label="Invisalign at Atlantic Dental Care">
+        <div className="container">
+          <div className="promo-layout">
+            <div className="promo-media">
+              <div className="pw rv" data-amp="1.2" style={{ aspectRatio: "4 / 3", borderRadius: 2 }}>
+                <img src={invisalignSmileImg} alt="Patient smiling at a digital preview of her Invisalign treatment" width={1500} height={1047} loading="lazy" decoding="async" style={{ objectFit: "cover", objectPosition: "center" }} />
+              </div>
+              <div className="promo-tile pw rv" data-amp="0.5" style={motionDelay(0.25)}>
+                <img src={viveraImg} alt="Vivera retainers — Atlantic Dental Care is a Vivera provider" width={800} height={800} loading="lazy" decoding="async" style={{ objectFit: "cover" }} />
+              </div>
+            </div>
+            <div>
+              <span className="tag">Invisalign® Provider · Vivera™ Provider</span>
+              <h2 className="h-section">
+                <SplitLines lines={["Get a jump on", <em key="e" style={{ color: "var(--green)" }}>your new smile.</em>]} />
+              </h2>
+              <p className="rv" style={{ ...motionDelay(0.25), color: "var(--mist)", fontSize: "clamp(15px,1.6vw,17px)", lineHeight: 1.7, fontWeight: 300, marginTop: "1.25rem", marginBottom: "1.5rem", maxWidth: 460 }}>
+                Clear aligners, no wires. We scan your teeth with the iTero™ Lumina in minutes — no impression trays — and show you a digital preview of how your smile could look before you commit. Vivera™ retainers keep it that way.
+              </p>
+              <div className="rv" style={{ ...motionDelay(0.35), marginBottom: "2rem" }}>
+                <img src={invisalignProviderImg} alt="Invisalign Provider" width={992} height={257} loading="lazy" decoding="async" style={{ height: 36, width: "auto", display: "block" }} />
+              </div>
+              <div className="rv" style={motionDelay(0.45)}>
+                <a href="#book" className="btn-green">Book an Invisalign Consult →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ══ REVIEWS ═════════════════════════════════════════ */}
       <section id="reviews" className="section-pad" style={{ background: "var(--smoke)" }} aria-label="Patient reviews">
         <div className="container">
@@ -950,8 +1018,7 @@ export default function App() {
                   &ldquo;
                 </span>
                 <h2 className="serif" style={{ fontSize: "clamp(34px,5vw,68px)", color: "var(--ink)", lineHeight: 1.05, letterSpacing: "-0.03em", position: "relative" }}>
-                  Don&apos;t take our word for it —<br />
-                  <em style={{ color: "var(--green)" }}>hear it from Virginia Beach.</em>
+                  <SplitLines lines={["Don’t take our word for it —", <em key="e" style={{ color: "var(--green)" }}>hear it from Virginia Beach.</em>]} />
                 </h2>
               </div>
 
@@ -1331,8 +1398,7 @@ export default function App() {
             <div className="book-sticky">
               <span className="tag">Book an Appointment</span>
               <h2 className="serif" style={{ fontSize: "clamp(36px,4.5vw,60px)", color: "var(--ink)", lineHeight: 1.05, letterSpacing: "-0.03em", marginBottom: "1.25rem" }}>
-                Ready for a<br />smile you<br />
-                <em style={{ color: "var(--green)" }}>love?</em>
+                <SplitLines lines={["Ready for a", "smile you", <em key="e" style={{ color: "var(--green)" }}>love?</em>]} />
               </h2>
               <p style={{ color: "var(--mist)", fontSize: 16, lineHeight: 1.7, fontWeight: 300, marginBottom: "2rem" }}>
                 Submit the form and we'll reach out to confirm within one business day. New and returning patients always welcome.
