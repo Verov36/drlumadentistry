@@ -165,11 +165,20 @@ body {
 @media (min-width: 640px) { .nav-tagline { display: block; } }
 
 /* ── Hero ─────────────────────────────────────────────────── */
-.hero { position: relative; min-height: 100svh; overflow: hidden; }
+.hero { position: relative; min-height: 100svh; overflow: hidden; background: var(--ink); }
+/* Media layer: parallax on scroll (--hero-y is set from App.tsx) */
+.hero-media {
+  position: absolute; inset: 0;
+  transform: translate3d(0, calc(var(--hero-y, 0px) * 0.35), 0);
+  will-change: transform;
+}
 .hero-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover; object-position: center top;
+  /* Slow settle-in zoom on load */
+  transform-origin: center top;
+  animation: hero-zoom 1.8s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .hero-overlay {
   position: absolute; inset: 0;
@@ -184,6 +193,47 @@ body {
   padding: calc(5.5rem + env(safe-area-inset-top)) 1.25rem 3rem;
   max-width: 1280px;
   margin-inline: auto;
+  /* Copy drifts ahead of the photo and fades as the hero scrolls away */
+  transform: translate3d(0, calc(var(--hero-y, 0px) * 0.12), 0);
+  opacity: var(--hero-fade, 1);
+  will-change: transform, opacity;
+}
+
+/* ── Hero motion: masked line reveals + staggered fade-ups ── */
+.reveal {
+  display: block; overflow: hidden;
+  /* room for descenders (y, p) so the clip mask doesn't shave them */
+  padding-bottom: 0.14em; margin-bottom: -0.14em;
+}
+.reveal-item {
+  display: block;
+  transform: translateY(110%);
+  animation: reveal-up 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--d, 0s);
+}
+.fade-up {
+  opacity: 0;
+  animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--d, 0s);
+}
+.badge-strip.fade-up { display: inline-flex; }
+.stats-row.fade-up { display: grid; }
+.hero-cta.fade-up { display: flex; }
+@keyframes reveal-up { to { transform: translateY(0); } }
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
+/* Scroll hint line breathes */
+.scroll-hint div { transform-origin: top; animation: hint-pulse 2.2s ease-in-out infinite; }
+@keyframes hint-pulse {
+  0%, 100% { transform: scaleY(0.35); opacity: 0.4; }
+  50%      { transform: scaleY(1);    opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-img, .reveal-item, .fade-up, .scroll-hint div { animation: none !important; transform: none !important; opacity: 1 !important; }
+  .hero-media, .hero-content { transform: none !important; opacity: 1 !important; }
 }
 @media (min-width: 640px) { .hero-content { padding-inline: 2rem; } }
 @media (min-width: 1024px) { .hero-content { padding-inline: 2.5rem; } }
@@ -226,6 +276,19 @@ body {
 /* ── Service card hover ───────────────────────────────────── */
 .svc-card { background: #fff; padding: 2rem 1.625rem; transition: background 0.2s; cursor: pointer; }
 .svc-card:hover { background: var(--green-light); }
+
+/* ── Technology section ───────────────────────────────────── */
+.tech-layout { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
+@media (min-width: 1024px) { .tech-layout { grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: center; } }
+.tech-grid { display: grid; grid-template-columns: 1fr; gap: 0.125rem; }
+@media (min-width: 640px) { .tech-grid { grid-template-columns: repeat(3, 1fr); } }
+.tech-card {
+  background: rgba(255,255,255,0.06);
+  border-top: 2px solid rgba(127,205,224,0.35);
+  padding: 2rem 1.5rem;
+  transition: background 0.2s, border-color 0.2s;
+}
+.tech-card:hover { background: rgba(255,255,255,0.1); border-top-color: var(--green-muted); }
 
 /* ── Gallery placeholder ──────────────────────────────────── */
 .gal-placeholder {

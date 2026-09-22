@@ -7,6 +7,7 @@ import adaImg from "./imports/ada.png";
 import vdaImg from "./imports/vda.jpeg";
 import drLumaImg from "./imports/Dr._Luma.jpeg";
 import porcelainCrownImg from "./imports/pic-porcelain-crown-before-after.jpg";
+import implantRestorationImg from "./imports/implants2-2-scaled.jpg";
 import privacyPdf from "./imports/Notice_of_Privacy_Practices_2026.pdf?url";
 import grievanceDocx from "./imports/1557_notice_and_grievance_policy.docx?url";
 
@@ -49,7 +50,7 @@ const navLinks = [
 
 const stats = [
   { value: "4.9★",      label: "Google Rating"         },
-  { value: "15+",       label: "Years in Virginia Beach"},
+  { value: "25",        label: "Years of Experience"   },
   { value: "2,000+",    label: "Smiles Transformed"    },
   { value: "Same-Day",  label: "Emergency Care"         },
 ];
@@ -62,7 +63,7 @@ const pillars = [
 ];
 
 const cosmeticServices = [
-  { emoji: "⬡", title: "Dental Implants",       desc: "3i implants with ~98% success rate. Cone-shaped screws contain calcium phosphate for superior bone integration. Multiple implants possible in one visit." },
+  { emoji: "⬡", title: "Dental Implant Restoration", desc: "Custom crowns, bridges, and implant-supported dentures secured to your dental implants — restoring full chewing function and a natural, permanent-looking smile after tooth loss." },
   { emoji: "◇", title: "Composite Fillings",     desc: "Tooth-colored fillings matched to your teeth. Used for decay, chips, cracks, or closing gaps — completed in a single appointment." },
   { emoji: "◉", title: "Porcelain Crowns",       desc: "Natural-looking crowns that restore strength and appearance to damaged or weakened teeth, crafted to blend seamlessly." },
   { emoji: "▲", title: "Porcelain Bridges",      desc: "Fixed restorations that fill gaps from missing teeth, anchored to neighboring teeth for a stable, natural-looking result." },
@@ -77,8 +78,8 @@ const preventiveServices = [
   { emoji: "◉", title: "Philips Zoom! Whitening", desc: "In-office whitening up to 8 shades brighter in a single visit. Safe, fast, and professionally monitored." },
   { emoji: "◈", title: "Comprehensive Exams",     desc: "Full diagnostic x-rays, oral cancer screening (face, neck, lips, tongue, throat, tissues, gums), gum eval, and decay check." },
   { emoji: "⬡", title: "Professional Cleanings",  desc: "Performed by our Registered Dental Hygienists — calculus and tartar removal, plaque removal, and professional polishing." },
-  { emoji: "◇", title: "Dental X-Rays",           desc: "Full-mouth series for new patients. Annual or biannual bite-wing x-rays detect decay, bone loss, abscesses, and more." },
-  { emoji: "▲", title: "Fluoride Treatments",     desc: "Topical and systemic fluoride twice yearly for children. Also advised for patients with exposed roots or high decay risk." },
+  { emoji: "◇", title: "Digital X-Rays",          desc: "Low-radiation digital imaging with instant results. Full-mouth series for new patients; annual or biannual bite-wings detect decay, bone loss, abscesses, and more." },
+  { emoji: "▲", title: "Fluoride Treatments",     desc: "Dr. Luma recommends fluoride for all of her patients, not just children. Topical and systemic treatments strengthen enamel and guard against decay — especially for exposed roots or high decay risk." },
   { emoji: "⊕", title: "Periodontal Disease Care",desc: "Diagnosis, treatment, and long-term maintenance for gum disease. We address the mouth-body connection: diabetes, heart disease, and more." },
   { emoji: "◎", title: "Orthodontics",            desc: "Invisalign, retainers, and malocclusion correction. Straight teeth are healthier teeth for patients of all ages." },
 ];
@@ -97,7 +98,7 @@ const team: TeamMember[] = [
   { name: "Christine Nguyen",  role: "Dental Hygienist",                        bio: "Christine brings precision and warmth to every hygiene appointment. Her thorough cleanings and patient education help patients build lasting habits for a healthier smile." },
   { name: "Laurie Harwood",    role: "Dental Hygienist",                        bio: "Laurie is dedicated to making cleanings comfortable and informative. She takes time with every patient to ensure their gum health and overall oral wellness are on the right track." },
   { name: "Sharmie Woodall",   role: "Dental Assistant",                        bio: "Sharmie's chairside skill and calm presence make a real difference — especially for patients who feel anxious. She supports Dr. Luma with expertise and genuine care for every patient." },
-  { name: "Fabie Orndorff",    role: "Dental Assistant",                        bio: "Fabie brings energy and attention to detail to every procedure she assists with. Patients appreciate her reassuring nature and her ability to keep things moving smoothly." },
+  { name: "Fabie Orndorff",    role: "Dental Assistant · Se habla español",    bio: "Fabie brings energy and attention to detail to every procedure she assists with. Fluent in Spanish, she is our go-to for Spanish-speaking patients, and her reassuring nature keeps every visit moving smoothly." },
   { name: "Julia Alpert",      role: "Dental Assistant",                        bio: "Julia is committed to delivering a comfortable experience at every appointment. Her attentiveness and clinical support help Dr. Luma deliver the high-quality care our patients expect." },
 ];
 
@@ -112,7 +113,7 @@ const team: TeamMember[] = [
 const unsplash = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&h=900&q=75`;
 type GalleryItem = { label: string; img: string; alt: string; patient?: boolean; contain?: boolean };
 const galleryItems: GalleryItem[] = [
-  { label: "Dental Implants",     img: unsplash("photo-1777445826358-f95518f49b44"), alt: "Dentist demonstrating a dental implant on a dental model" },            // Harold Hisona
+  { label: "Dental Implant Restoration", img: implantRestorationImg, contain: true, alt: "Dental implant restoration — implant posts before, and the finished implant-supported crowns after" },
   { label: "Porcelain Crowns",    img: porcelainCrownImg, patient: true, alt: "Porcelain crown before and after — actual Atlantic Dental Care patient" },
   { label: "Composite Fillings",  img: unsplash("photo-1766338390573-ec092d69cdcb"), alt: "Dentist placing a filling with instruments and a curing light" },      // Roby Allario
   { label: "Dentures & Partials", img: unsplash("photo-1525893277997-207c04d47d65"), alt: "Dental technician holding a finished full denture" },                  // Matthew Poetker
@@ -271,18 +272,31 @@ function switchLanguage(code: string) {
 const initials = (name: string) =>
   name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]!.toUpperCase()).join("");
 
+/* Stagger delay for the hero's load-in animations (see .reveal-item / .fade-up in index.css) */
+const motionDelay = (seconds: number) => ({ "--d": `${seconds}s` } as React.CSSProperties);
+
 /* Visible FAQ — keep in sync with the FAQPage JSON-LD in index.html */
 const faqs = [
   { q: "Is Dr. Luma accepting new patients in Virginia Beach?",
     a: "Yes! Atlantic Dental Care welcomes new patients. Call 757-430-2600 or book online. Same-day appointments are often available." },
   { q: "What dental services does Atlantic Dental Care offer?",
-    a: "We offer dental implants, Invisalign, Philips Zoom whitening, porcelain crowns and bridges, composite fillings, dentures, BruxZir crowns, inlays and onlays, cleanings, exams, fluoride treatments, periodontal disease treatment, and more." },
+    a: "We offer dental implant restoration, Invisalign, Philips Zoom whitening, porcelain crowns and bridges, composite fillings, dentures, BruxZir crowns, inlays and onlays, cleanings, exams, fluoride treatments, periodontal disease treatment, and more." },
+  { q: "Does Dr. Luma recommend fluoride for adults?",
+    a: "Yes. Dr. Luma recommends fluoride for all of her patients, not just children. Professional fluoride strengthens enamel and helps prevent decay, especially for patients with exposed roots, dry mouth, or a history of cavities." },
+  { q: "What technology does Atlantic Dental Care use?",
+    a: "Our Virginia Beach office uses laser treatments, digital x-rays, and intraoral cameras, so you can see exactly what our team sees and understand every recommendation." },
   { q: "Does Dr. Luma accept CareCredit?",
     a: "Yes, Atlantic Dental Care accepts CareCredit financing, making it easy to get the care you need without delay." },
   { q: "What are the office hours?",
     a: "The office is open Monday through Thursday, 8:30 AM to 5:30 PM. The office is closed Friday through Sunday." },
   { q: "Where is Atlantic Dental Care located?",
     a: "We are located at 1244 Perimeter Pkwy, Suite 444, Virginia Beach, VA 23454." },
+];
+
+const technology = [
+  { emoji: "✧", title: "Laser Treatments",  desc: "Precise, gentle laser dentistry for soft-tissue procedures — less bleeding, less discomfort, and faster healing than traditional methods." },
+  { emoji: "◫", title: "Digital X-Rays",    desc: "Instant, high-resolution images with a fraction of the radiation of film x-rays — easy to enlarge and review together chairside." },
+  { emoji: "◉", title: "Intraoral Cameras", desc: "A tiny camera shows you exactly what our team sees inside your mouth, on screen, in real time — so you understand every recommendation." },
 ];
 
 const steps = [
@@ -309,6 +323,30 @@ export default function App() {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Hero parallax: the photo drifts slower than the page while the copy drifts
+  // ahead and fades, so the frame feels like it has depth as you scroll away.
+  useEffect(() => {
+    const hero = document.querySelector<HTMLElement>(".hero");
+    if (!hero || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const height = hero.offsetHeight || 1;
+      const y = Math.min(window.scrollY, height);
+      hero.style.setProperty("--hero-y", `${y}px`);
+      hero.style.setProperty("--hero-fade", String(Math.max(0, 1 - y / (height * 0.7))));
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
 
   // Google Translate pushes <body> down (top: 40px) while its bar is showing.
@@ -473,40 +511,43 @@ export default function App() {
 
       {/* ══ HERO ═════════════════════════════════════════════ */}
       <section className="hero" aria-label="Welcome to Atlantic Dental Care">
-        <img
-          src={HERO_IMAGE}
-          alt="Smiling patient at Atlantic Dental Care in Virginia Beach"
-          className="hero-img"
-          fetchPriority="high"
-          decoding="async"
-        />
+        {/* Media sits in its own layer so the scroll parallax and the load-in zoom don't fight over `transform` */}
+        <div className="hero-media" aria-hidden="true">
+          <img
+            src={HERO_IMAGE}
+            alt=""
+            className="hero-img"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </div>
         <div className="hero-overlay" />
 
         <div className="hero-content">
           <div style={{ maxWidth: 640 }}>
-            <div className="badge-strip">
+            <div className="badge-strip fade-up" style={motionDelay(0.05)}>
               <span style={{ width: 6, height: 6, background: "#6fcf97", borderRadius: "50%", display: "inline-block", flexShrink: 0 }} />
               <span style={{ color: "rgba(255,255,255,0.85)", fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase" }}>
                 New Patients Welcome · Same-Day Appointments Available
               </span>
             </div>
 
+            {/* Each line rises out of its own clipping mask, one after the other */}
             <h1 className="serif" style={{ fontSize: "clamp(42px,7.5vw,88px)", color: "#fff", lineHeight: 1.02, letterSpacing: "-0.03em", marginBottom: "1.25rem" }}>
-              Your smile is
-              <br />
-              <em style={{ color: "var(--green-muted)" }}>our top priority.</em>
+              <span className="reveal"><span className="reveal-item" style={motionDelay(0.2)}>Your smile is</span></span>
+              <span className="reveal"><em className="reveal-item" style={{ ...motionDelay(0.35), color: "var(--green-muted)" }}>our top priority.</em></span>
             </h1>
 
-            <p style={{ color: "rgba(255,255,255,0.66)", fontSize: "clamp(15px,1.8vw,18px)", lineHeight: 1.65, fontWeight: 300, marginBottom: "2.25rem", maxWidth: 500 }}>
+            <p className="fade-up" style={{ ...motionDelay(0.55), color: "rgba(255,255,255,0.66)", fontSize: "clamp(15px,1.8vw,18px)", lineHeight: 1.65, fontWeight: 300, marginBottom: "2.25rem", maxWidth: 500 }}>
               Dr. Evelyn Luma and her team deliver personalized, gentle dental care in Virginia Beach — from routine cleanings to complete smile transformations.
             </p>
 
-            <div className="hero-cta">
+            <div className="hero-cta fade-up" style={motionDelay(0.7)}>
               <a href="#book" className="btn-green">Book an Appointment →</a>
               <a href={`tel:${PHONE}`} className="btn-outline">{PHONE}</a>
             </div>
 
-            <div className="stats-row">
+            <div className="stats-row fade-up" style={motionDelay(0.9)}>
               {stats.map(s => (
                 <div key={s.label}>
                   <p className="serif" style={{ color: "#fff", fontSize: "clamp(20px,3vw,28px)" }}>{s.value}</p>
@@ -606,6 +647,33 @@ export default function App() {
         </div>
       </section>
 
+      {/* ══ TECHNOLOGY ══════════════════════════════════════ */}
+      <section id="technology" className="section-pad" style={{ background: "var(--ink)" }} aria-label="Advanced dental technology">
+        <div className="container">
+          <div className="tech-layout">
+            <div>
+              <span className="tag" style={{ color: "var(--green-muted)" }}>Modern Technology</span>
+              <h2 className="serif" style={{ fontSize: "clamp(32px,4vw,54px)", color: "#fff", lineHeight: 1.08, letterSpacing: "-0.03em", marginBottom: "1.25rem" }}>
+                High-tech care,<br />
+                <em style={{ color: "var(--green-muted)" }}>human touch.</em>
+              </h2>
+              <p style={{ color: "rgba(255,255,255,0.56)", fontSize: "clamp(14px,1.5vw,16px)", lineHeight: 1.75, fontWeight: 300, maxWidth: 440 }}>
+                Dr. Luma invests in the tools that make dentistry more accurate, more comfortable, and easier to understand — so you see what we see and know exactly what's happening with your smile.
+              </p>
+            </div>
+            <div className="tech-grid">
+              {technology.map(t => (
+                <article key={t.title} className="tech-card">
+                  <span aria-hidden="true" style={{ fontSize: 22, color: "var(--green-muted)", display: "block", marginBottom: "0.875rem" }}>{t.emoji}</span>
+                  <h3 className="serif" style={{ fontSize: "clamp(18px,2vw,22px)", color: "#fff", marginBottom: "0.5rem" }}>{t.title}</h3>
+                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.7, fontWeight: 300 }}>{t.desc}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ══ HOW IT WORKS ════════════════════════════════════ */}
       <section className="section-pad" style={{ background: "#fff" }}>
         <div className="container">
@@ -664,14 +732,14 @@ export default function App() {
                 Dr. Luma earned her BS in Chemistry from <strong style={{ color: "rgba(255,255,255,0.75)" }}>Southwestern Oklahoma State University</strong> (1993) and her DDS from <strong style={{ color: "rgba(255,255,255,0.75)" }}>Meharry Medical College</strong> in Nashville, TN (May 2000).
               </p>
               <p style={{ color: "rgba(255,255,255,0.52)", fontSize: 15, lineHeight: 1.8, fontWeight: 300, marginBottom: "0.875rem" }}>
-                She completed her general practice residency at <strong style={{ color: "rgba(255,255,255,0.75)" }}>St. Elizabeth's Hospital</strong> in Washington, D.C., then practiced in Northern Virginia and Hampton, VA before establishing her solo practice here in Virginia Beach.
+                She completed her general practice residency at <strong style={{ color: "rgba(255,255,255,0.75)" }}>St. Elizabeth's Hospital</strong> in Washington, D.C., then practiced in Northern Virginia and Hampton, VA before establishing her solo practice here in Virginia Beach — bringing 25 years of experience to every patient she sees.
               </p>
               <p style={{ color: "rgba(255,255,255,0.52)", fontSize: 15, lineHeight: 1.8, fontWeight: 300, marginBottom: "2rem" }}>
                 She is an award recipient from the <strong style={{ color: "rgba(255,255,255,0.75)" }}>American Academy of Periodontology</strong> and an honorable member of <strong style={{ color: "rgba(255,255,255,0.75)" }}>Manchester's Who's Who of Executives and Professionals</strong>.
               </p>
 
               <div className="about-creds">
-                {["ADA Member","Zoom! Certified","Invisalign Provider","CareCredit Accepted","AAP Award Recipient","15+ Years Experience"].map(b => (
+                {["ADA Member","Zoom! Certified","Invisalign Provider","CareCredit Accepted","AAP Award Recipient","25 Years of Experience"].map(b => (
                   <div key={b} style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
                     <div style={{ width: 6, height: 6, background: "var(--green)", borderRadius: "50%", flexShrink: 0 }} />
                     <span style={{ color: "rgba(255,255,255,0.58)", fontSize: 13 }}>{b}</span>
@@ -743,7 +811,7 @@ export default function App() {
           {/* Spanish note */}
           <div style={{ marginTop: "1.5rem", background: "var(--green-light)", padding: "1rem 1.375rem", borderLeft: "3px solid var(--green)", borderRadius: 2 }}>
             <p style={{ fontSize: 13, color: "var(--mist)" }}>
-              <strong style={{ color: "var(--green)" }}>Se habla español.</strong> Our bilingual front office coordinator Mayleen is fluent in Spanish and happy to assist Spanish-speaking patients throughout their entire visit.
+              <strong style={{ color: "var(--green)" }}>Se habla español.</strong> Our bilingual dental assistant Fabie is fluent in Spanish and happy to assist Spanish-speaking patients throughout their entire visit.
             </p>
           </div>
         </div>
@@ -1306,7 +1374,7 @@ export default function App() {
                       <select id="service" className="field" name="service" required value={form.service} onChange={handleChange} style={{ color: form.service ? "var(--ink)" : "var(--pebble)", cursor: "pointer" }}>
                         <option value="">Select a service…</option>
                         <optgroup label="Cosmetic & Restorative">
-                          <option>Dental Implants</option>
+                          <option>Dental Implant Restoration</option>
                           <option>Porcelain Crowns</option>
                           <option>Porcelain Bridges</option>
                           <option>Composite Fillings</option>
@@ -1404,7 +1472,7 @@ export default function App() {
             {/* Services */}
             <div>
               <p style={{ color: "rgba(255,255,255,0.28)", fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "1rem" }}>Services</p>
-              {["Dental Implants","Invisalign®","Zoom! Whitening","Porcelain Crowns","Cleanings & Exams","Periodontal Care"].map(s => (
+              {["Dental Implant Restoration","Invisalign®","Zoom! Whitening","Porcelain Crowns","Cleanings & Exams","Periodontal Care"].map(s => (
                 <a key={s} href="#services" style={{ display: "block", color: "rgba(255,255,255,0.42)", fontSize: 13, textDecoration: "none", marginBottom: "0.5rem" }}>{s}</a>
               ))}
             </div>
