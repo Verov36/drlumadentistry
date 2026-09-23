@@ -9,6 +9,9 @@ import vdaImg from "./imports/vda.jpeg";
 import drLumaImg from "./imports/Dr._Luma.jpeg";
 import porcelainCrownImg from "./imports/pic-porcelain-crown-before-after.jpg";
 import implantRestorationImg from "./imports/implants2-2-scaled.jpg";
+import smileMakeoverImg from "./imports/smile-makeover-before-after.jpg";
+import crownTryInImg from "./imports/crown-try-in.jpg";
+import frontCrownsImg from "./imports/front-crowns-final.jpg";
 import invisalignProviderImg from "./imports/invisalign-provider.png";
 import careCreditImg from "./imports/carecredit.png";
 import philipsZoomImg from "./imports/philips-zoom.jpg";
@@ -120,8 +123,11 @@ const team: TeamMember[] = [
 const unsplash = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&h=900&q=75`;
 type GalleryItem = { label: string; img: string; alt: string; patient?: boolean; contain?: boolean };
 const galleryItems: GalleryItem[] = [
+  { label: "Smile Makeover — Upper Front Crowns", img: smileMakeoverImg, patient: true, alt: "Before and after: discolored, uneven upper front teeth restored with porcelain crowns — actual Atlantic Dental Care patient" },
   { label: "Dental Implant Restoration", img: implantRestorationImg, contain: true, alt: "Dental implant restoration — implant posts before, and the finished implant-supported crowns after" },
   { label: "Porcelain Crowns",    img: porcelainCrownImg, patient: true, alt: "Porcelain crown before and after — actual Atlantic Dental Care patient" },
+  { label: "Porcelain Crown Try-In", img: crownTryInImg, patient: true, alt: "A new porcelain crown being tried in on a prepared upper front tooth — actual Atlantic Dental Care patient" },
+  { label: "Front Teeth Crowns",     img: frontCrownsImg, patient: true, alt: "Finished porcelain crowns on the upper front teeth, side view — actual Atlantic Dental Care patient" },
   { label: "Composite Fillings",  img: unsplash("photo-1766338390573-ec092d69cdcb"), alt: "Dentist placing a filling with instruments and a curing light" },      // Roby Allario
   { label: "Dentures & Partials", img: unsplash("photo-1525893277997-207c04d47d65"), alt: "Dental technician holding a finished full denture" },                  // Matthew Poetker
   { label: "Invisalign®",         img: unsplash("photo-1609840114035-3c981b782dfe"), alt: "Person placing a clear Invisalign-style aligner over their teeth" },   // Diana Polekhina
