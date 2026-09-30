@@ -17,6 +17,14 @@ import teamDoraImg from "./imports/team-dora-scott.jpg";
 import teamChristineImg from "./imports/team-christine-nguyen.jpg";
 import teamJuliaImg from "./imports/team-julia-alpert.jpg";
 import teamGroupImg from "./imports/team-group.jpg";
+import officeExteriorImg from "./imports/office/exterior.jpg";
+import officeSignageImg from "./imports/office/signage.jpg";
+import officeEntryImg from "./imports/office/entry.jpg";
+import officeWaitingImg from "./imports/office/waiting-room.jpg";
+import officeFrontDeskImg from "./imports/office/front-desk.jpg";
+import officeOperatory1Img from "./imports/office/operatory-window.jpg";
+import officeOperatory2Img from "./imports/office/operatory.jpg";
+import officeDrLumaImg from "./imports/office/dr-luma-at-work.jpg";
 import invisalignProviderImg from "./imports/invisalign-provider.png";
 import careCreditImg from "./imports/carecredit.png";
 import philipsZoomImg from "./imports/philips-zoom.jpg";
@@ -45,12 +53,21 @@ const MAPS_URL = GOOGLE_LISTING_URL;
 const MAPS_EMBED_URL = "https://www.google.com/maps?q=" + encodeURIComponent(ADDRESS) + "&z=15&output=embed";
 
 /*
- * HERO IMAGE — temporary stock photo. To use a real practice photo:
- *   1. Save it as src/imports/hero.jpg (landscape, ~1600px wide, under 250 KB)
- *   2. Add:  import heroImg from "./imports/hero.jpg";   and set HERO_IMAGE = heroImg
- *   3. Update the <link rel="preload"> href in index.html to match (or remove it)
+ * HERO PHOTO STRIPS — the practice's own office photography, shown as two rows
+ * of cards drifting in opposite directions behind the headline. The source
+ * files are 600x400, so cards are kept at a size where they stay sharp.
+ * Order matters: the first four ride the top row, the rest the bottom row.
  */
-const HERO_IMAGE = "https://images.unsplash.com/photo-1489278353717-f64c6ee8a4d2?w=1400&h=900&fit=crop&auto=format&crop=top";
+const heroPhotos = [
+  { src: officeExteriorImg,  alt: "Atlantic Dental Care building at 1244 Perimeter Parkway, Virginia Beach" },
+  { src: officeWaitingImg,   alt: "Reception and waiting area with stone front desk" },
+  { src: officeOperatory1Img, alt: "Treatment room with a large window onto the lawn" },
+  { src: officeEntryImg,     alt: "Welcome sign on the Suite 444 entry door" },
+  { src: officeFrontDeskImg, alt: "Curved stone reception desk and wall fountain" },
+  { src: officeSignageImg,   alt: "Evelyn E. Luma, DDS Family Dentistry signage on the brick exterior" },
+  { src: officeDrLumaImg,    alt: "Dr. Luma working at her desk" },
+  { src: officeOperatory2Img, alt: "Treatment room with dental chair and natural light" },
+];
 
 /* ── Data ─────────────────────────────────────────────────── */
 const navLinks = [
@@ -394,12 +411,23 @@ export default function App() {
       hero.style.setProperty("--hero-fade", String(Math.max(0, 1 - y / (height * 0.7))));
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    // Mouse lean: -1..1 across the hero, eased in CSS
+    const onMove = (e: MouseEvent) => {
+      const r = hero.getBoundingClientRect();
+      hero.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 2 - 1).toFixed(3));
+      hero.style.setProperty("--my", ((e.clientY - r.top) / r.height * 2 - 1).toFixed(3));
+    };
+    const onLeave = () => { hero.style.setProperty("--mx", "0"); hero.style.setProperty("--my", "0"); };
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
+    if (fine) { hero.addEventListener("mousemove", onMove, { passive: true }); hero.addEventListener("mouseleave", onLeave); }
     update();
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      hero.removeEventListener("mousemove", onMove);
+      hero.removeEventListener("mouseleave", onLeave);
       if (raf) cancelAnimationFrame(raf);
     };
   }, []);
@@ -577,15 +605,19 @@ export default function App() {
 
       {/* ══ HERO ═════════════════════════════════════════════ */}
       <section className="hero" aria-label="Welcome to Atlantic Dental Care">
-        {/* Media sits in its own layer so the scroll parallax and the load-in zoom don't fight over `transform` */}
-        <div className="hero-media" aria-hidden="true">
-          <img
-            src={HERO_IMAGE}
-            alt=""
-            className="hero-img"
-            fetchPriority="high"
-            decoding="async"
-          />
+        {/* Two rows of office photos drift in opposite directions; the whole layer parallaxes on scroll and leans with the mouse */}
+        <div className="hero-media hero-strips" aria-hidden="true">
+          {[heroPhotos.slice(0, 4), heroPhotos.slice(4)].map((row, r) => (
+            <div key={r} className={`strip strip-${r === 0 ? "a" : "b"}`}>
+              <div className="strip-track">
+                {[...row, ...row].map((p, i) => (
+                  <div key={i} className="strip-card" style={{ "--i": String(i) } as React.CSSProperties}>
+                    <img src={p.src} alt="" width={600} height={400} decoding="async" fetchPriority={r === 0 && i < 4 ? "high" : "auto"} loading={i < 4 ? "eager" : "lazy"} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
         <div className="hero-overlay" />
 

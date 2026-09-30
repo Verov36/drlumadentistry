@@ -169,7 +169,8 @@ body {
 /* Media layer: parallax on scroll (--hero-y is set from App.tsx) */
 .hero-media {
   position: absolute; inset: 0;
-  transform: translate3d(0, calc(var(--hero-y, 0px) * 0.35), 0);
+  transform: translate3d(calc(var(--mx, 0) * -14px), calc(var(--hero-y, 0px) * 0.35 + var(--my, 0) * -10px), 0);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
 }
 .hero-img {
@@ -182,7 +183,7 @@ body {
 }
 .hero-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(105deg, rgba(16,32,62,0.90) 0%, rgba(16,32,62,0.62) 55%, rgba(16,32,62,0.18) 100%);
+  background: linear-gradient(100deg, rgba(16,32,62,0.94) 0%, rgba(16,32,62,0.80) 42%, rgba(16,32,62,0.42) 100%);
 }
 .hero-content {
   position: relative;
@@ -657,3 +658,45 @@ html.motion .lines.is-in .ln-i { transform: none; }
 /* ── Team group banner ────────────────────────────────────── */
 .team-banner { aspect-ratio: 21 / 8; border-radius: 2px; }
 @media (max-width: 639px) { .team-banner { aspect-ratio: 16 / 9; } }
+
+/* ── Hero photo strips ────────────────────────────────────── */
+.hero-strips {
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(0.75rem, 1.6vw, 1.5rem);
+  overflow: hidden;
+  /* Slight lean and overscan so the rotated rows never show an edge */
+  transform-origin: center;
+}
+.hero-strips::before { /* soft vignette so the cards sit "in" the room */
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(120% 90% at 70% 50%, transparent 40%, rgba(10,22,44,0.55) 100%);
+}
+.strip { width: 140vw; margin-left: -20vw; transform: rotate(-4deg); }
+.strip-track { display: flex; width: max-content; will-change: transform; animation: strip-left 70s linear infinite; }
+.strip-b .strip-track { animation: strip-right 85s linear infinite; }
+.strip-card {
+  flex: none;
+  width: clamp(200px, 26vw, 400px); aspect-ratio: 3 / 2;
+  margin-right: clamp(0.75rem, 1.6vw, 1.5rem);
+  border-radius: 6px; overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+  background: #0e2244;
+  opacity: 0;
+  animation: fade-up 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(0.15s + var(--i, 0) * 70ms);
+}
+.strip-card img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@keyframes strip-left  { from { transform: translate3d(0, 0, 0); }    to { transform: translate3d(-50%, 0, 0); } }
+@keyframes strip-right { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(0, 0, 0); } }
+.hero:hover .strip-track { animation-play-state: running; }
+@media (max-width: 767px) {
+  .strip { width: 180vw; margin-left: -40vw; transform: rotate(-6deg); }
+  .strip-card { width: 44vw; }
+  .strip-track { animation-duration: 45s; }
+  .strip-b .strip-track { animation-duration: 55s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .strip-track { animation: none !important; transform: translate3d(-10%, 0, 0) !important; }
+  .strip-card { animation: none !important; opacity: 1 !important; }
+  .hero-media { transform: none !important; transition: none !important; }
+}
