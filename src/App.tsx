@@ -6,7 +6,7 @@ import type { Review } from "./hooks/useReviews";
 import logoImg from "./imports/logo.jpeg";
 import adaImg from "./imports/ada.png";
 import vdaImg from "./imports/vda.jpeg";
-import drLumaImg from "./imports/Dr._Luma.jpeg";
+import aboutDrLumaImg from "./imports/about-dr-luma.jpg";
 import porcelainCrownImg from "./imports/pic-porcelain-crown-before-after.jpg";
 import implantRestorationImg from "./imports/implants2-2-scaled.jpg";
 import smileMakeoverImg from "./imports/smile-makeover-before-after.jpg";
@@ -782,9 +782,9 @@ export default function App() {
               <div style={{ background: "var(--green-dark)", position: "absolute", top: -12, left: -12, right: "2rem", bottom: "2rem", borderRadius: 2 }} aria-hidden="true" />
               <div className="pw" style={{ position: "relative", height: "clamp(320px,45vw,520px)", borderRadius: 2 }}>
                 <img
-                  src={drLumaImg}
+                  src={aboutDrLumaImg}
                   alt="Dr. Evelyn E. Luma, DDS — Atlantic Dental Care, Virginia Beach"
-                  width={480} height={480} loading="lazy" decoding="async"
+                  width={640} height={800} loading="lazy" decoding="async"
                   style={{ objectFit: "cover", objectPosition: "center top" }}
                 />
               </div>
