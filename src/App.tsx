@@ -12,6 +12,11 @@ import implantRestorationImg from "./imports/implants2-2-scaled.jpg";
 import smileMakeoverImg from "./imports/smile-makeover-before-after.jpg";
 import crownTryInImg from "./imports/crown-try-in.jpg";
 import frontCrownsImg from "./imports/front-crowns-final.jpg";
+import teamDrLumaImg from "./imports/team-dr-luma.jpg";
+import teamDoraImg from "./imports/team-dora-scott.jpg";
+import teamChristineImg from "./imports/team-christine-nguyen.jpg";
+import teamJuliaImg from "./imports/team-julia-alpert.jpg";
+import teamGroupImg from "./imports/team-group.jpg";
 import invisalignProviderImg from "./imports/invisalign-provider.png";
 import careCreditImg from "./imports/carecredit.png";
 import philipsZoomImg from "./imports/philips-zoom.jpg";
@@ -102,14 +107,14 @@ const preventiveServices = [
  */
 type TeamMember = { name: string; role: string; bio: string; photo?: string };
 const team: TeamMember[] = [
-  { name: "Dora Scott",        role: "Office Manager",                          bio: "Dora keeps Atlantic Dental Care running smoothly for every patient and provider. With decades of dental office experience, she ensures your visit is seamless from the moment you call to the moment you leave." },
+  { name: "Dora Scott",        photo: teamDoraImg, role: "Office Manager",                          bio: "Dora keeps Atlantic Dental Care running smoothly for every patient and provider. With decades of dental office experience, she ensures your visit is seamless from the moment you call to the moment you leave." },
   { name: "Michelle Boone",    role: "Front Office Coordinator",                bio: "Michelle is often the first friendly voice you hear when you contact our office. She handles patient communications, insurance questions, and helps make every experience welcoming and stress-free." },
   { name: "Amanda McBride",    role: "Front Office Agent & Scheduling Coordinator", bio: "Amanda specializes in keeping the schedule organized so patients are seen on time and get the appointments they need. She makes booking easy and works hard to accommodate your busy life." },
-  { name: "Christine Nguyen",  role: "Dental Hygienist",                        bio: "Christine brings precision and warmth to every hygiene appointment. Her thorough cleanings and patient education help patients build lasting habits for a healthier smile." },
+  { name: "Christine Nguyen",  photo: teamChristineImg, role: "Dental Hygienist",                        bio: "Christine brings precision and warmth to every hygiene appointment. Her thorough cleanings and patient education help patients build lasting habits for a healthier smile." },
   { name: "Laurie Harwood",    role: "Dental Hygienist",                        bio: "Laurie is dedicated to making cleanings comfortable and informative. She takes time with every patient to ensure their gum health and overall oral wellness are on the right track." },
   { name: "Sharmie Woodall",   role: "Dental Assistant",                        bio: "Sharmie's chairside skill and calm presence make a real difference — especially for patients who feel anxious. She supports Dr. Luma with expertise and genuine care for every patient." },
   { name: "Fabie Orndorff",    role: "Dental Assistant · Se habla español",    bio: "Fabie brings energy and attention to detail to every procedure she assists with. Fluent in Spanish, she is our go-to for Spanish-speaking patients, and her reassuring nature keeps every visit moving smoothly." },
-  { name: "Julia Alpert",      role: "Dental Assistant",                        bio: "Julia is committed to delivering a comfortable experience at every appointment. Her attentiveness and clinical support help Dr. Luma deliver the high-quality care our patients expect." },
+  { name: "Julia Alpert",      photo: teamJuliaImg, role: "Dental Assistant",                        bio: "Julia is committed to delivering a comfortable experience at every appointment. Her attentiveness and clinical support help Dr. Luma deliver the high-quality care our patients expect." },
 ];
 
 /*
@@ -833,11 +838,16 @@ export default function App() {
             </h2>
           </div>
 
+          {/* Team photo banner */}
+          <div className="pw team-banner rv" data-amp="0.8" style={{ marginBottom: 2 }}>
+            <img src={teamGroupImg} alt="The Atlantic Dental Care team in the Virginia Beach office" width={1600} height={607} loading="lazy" decoding="async" style={{ objectFit: "cover", objectPosition: "center 35%" }} />
+          </div>
+
           {/* Dr. Luma featured */}
           <div className="team-featured rv" style={{ background: "var(--green)", marginBottom: 2, borderRadius: 2, overflow: "hidden" }}>
             <div className="pw" data-amp="0.6" style={{ minHeight: 240 }}>
               <img
-                src={drLumaImg}
+                src={teamDrLumaImg}
                 alt="Dr. Evelyn E. Luma, DDS"
                 width={480} height={480} loading="lazy" decoding="async"
                 style={{ minHeight: 240, objectFit: "cover", objectPosition: "center top" }}
