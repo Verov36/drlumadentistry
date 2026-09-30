@@ -11,7 +11,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" />
+    <!-- Fonts load without blocking first paint; display=swap shows system text until they arrive -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" /></noscript>
 
     <!-- ── Icons / theme ── -->
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -191,7 +194,15 @@
         new google.translate.TranslateElement({ pageLanguage: "en", autoDisplay: false }, "google_translate_element");
       }
     </script>
-    <script async src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script>
+      // Google Translate is ~400 KB. Load it on page load only when a translation is already active
+      // (googtrans cookie); otherwise the language menu in the footer loads it on demand.
+      if (/(^|; )googtrans=[^;]/.test(document.cookie)) {
+        var gt = document.createElement("script"); gt.async = true;
+        gt.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+        document.head.appendChild(gt);
+      }
+    </script>
   </head>
   <body>
     <!-- figma:body-start -->

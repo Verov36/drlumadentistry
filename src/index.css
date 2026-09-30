@@ -499,8 +499,16 @@ body { line-height: var(--a11y-lh, 1.5); letter-spacing: var(--a11y-ls, normal);
   min-height: 48px; border-radius: 2px;
   font-weight: 700; font-size: 14px; letter-spacing: 0.02em; text-decoration: none;
 }
-.mobile-cta-call { flex: 0 0 auto; padding: 0 1.125rem; border: 1.5px solid var(--green); color: var(--green-dark); background: #fff; }
-.mobile-cta-book { flex: 1 1 auto; background: var(--green); color: #fff; }
+/* Call Now: bottom-left, filled, with a slow pulse ring so the thumb finds it */
+.mobile-cta-call { flex: 0 0 auto; padding: 0 1.25rem; background: var(--green); color: #fff; border: 1.5px solid var(--green); position: relative; }
+.mobile-cta-call::before {
+  content: ""; position: absolute; inset: -5px; border-radius: 6px; pointer-events: none;
+  border: 2px solid rgba(0,151,178,0.55);
+  animation: call-pulse 2.4s ease-out infinite;
+}
+@keyframes call-pulse { 0% { transform: scale(0.94); opacity: 0.9; } 100% { transform: scale(1.16); opacity: 0; } }
+.mobile-cta-book { flex: 1 1 auto; background: #fff; color: var(--green-dark); border: 1.5px solid var(--green); }
+@media (prefers-reduced-motion: reduce) { .mobile-cta-call::before { animation: none; display: none; } }
 @media (max-width: 767px) {
   .mobile-cta-bar { display: flex; }
   /* keep the footer's last lines from hiding behind the bar */
@@ -699,4 +707,45 @@ html.motion .lines.is-in .ln-i { transform: none; }
   .strip-track { animation: none !important; transform: translate3d(-10%, 0, 0) !important; }
   .strip-card { animation: none !important; opacity: 1 !important; }
   .hero-media { transform: none !important; transition: none !important; }
+}
+
+/* ── Office walk-through ──────────────────────────────────── */
+.tour-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.tour-controls { display: flex; align-items: center; gap: 0.5rem; }
+.tour-controls p { color: var(--mist); font-size: 14px; font-weight: 300; margin-right: 0.5rem; }
+.tour-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--line); background: #fff; color: var(--ink);
+  font-size: 18px; line-height: 1; cursor: pointer; font-family: inherit;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+}
+.tour-btn:hover { background: var(--green); color: #fff; border-color: var(--green); transform: translateY(-1px); }
+.tour-track {
+  display: flex; gap: 1rem;
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding: 0.25rem max(1rem, calc((100vw - 1280px) / 2 + 2.5rem)) 1.5rem;
+  scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.tour-track::-webkit-scrollbar { height: 6px; }
+.tour-track::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+.tour-track:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
+.tour-card {
+  flex: 0 0 clamp(260px, 32vw, 420px); scroll-snap-align: start;
+  margin: 0; cursor: pointer;
+  background: #fff; border-radius: 4px; overflow: hidden;
+  box-shadow: 0 10px 30px rgba(22,43,80,0.08);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s;
+}
+html.motion .tour-card:hover { transform: translateY(-4px); box-shadow: 0 22px 44px rgba(22,43,80,0.14); }
+.tour-card:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.tour-card .pw { aspect-ratio: 3 / 2; }
+.tour-card figcaption { display: flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1rem; font-size: 14px; font-weight: 600; color: var(--ink); }
+.tour-num { font-family: 'DM Serif Display', Georgia, serif; color: var(--green); font-size: 18px; }
+html.motion .tour-card .pw > img { --hover: 1; }
+html.motion .tour-card:hover .pw > img { --hover: 1.06; }
+@media (max-width: 767px) {
+  .tour-card { flex-basis: 78vw; }
+  .tour-controls p { display: none; }
 }

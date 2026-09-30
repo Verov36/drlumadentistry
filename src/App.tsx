@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useReviews } from "./hooks/useReviews";
 import { track } from "./analytics";
 import { useScrollMotion, Cursor } from "./motion";
@@ -25,6 +25,34 @@ import officeFrontDeskImg from "./imports/office/front-desk.jpg";
 import officeOperatory1Img from "./imports/office/operatory-window.jpg";
 import officeOperatory2Img from "./imports/office/operatory.jpg";
 import officeDrLumaImg from "./imports/office/dr-luma-at-work.jpg";
+import officeExteriorCornerImg from "./imports/office/exterior-corner.jpg";
+import officeExteriorTreesImg from "./imports/office/exterior-trees.jpg";
+import officeExteriorEntranceImg from "./imports/office/exterior-entrance.jpg";
+/* Phone-sized versions of the hero photos (served via srcset) */
+import officeExteriorSm from "./imports/office/exterior-sm.jpg";
+import officeSignageSm from "./imports/office/signage-sm.jpg";
+import officeEntrySm from "./imports/office/entry-sm.jpg";
+import officeWaitingSm from "./imports/office/waiting-room-sm.jpg";
+import officeFrontDeskSm from "./imports/office/front-desk-sm.jpg";
+import officeOperatory1Sm from "./imports/office/operatory-window-sm.jpg";
+import officeOperatory2Sm from "./imports/office/operatory-sm.jpg";
+import officeDrLumaSm from "./imports/office/dr-luma-at-work-sm.jpg";
+import officeExteriorCornerSm from "./imports/office/exterior-corner-sm.jpg";
+import officeExteriorTreesSm from "./imports/office/exterior-trees-sm.jpg";
+import officeExteriorEntranceSm from "./imports/office/exterior-entrance-sm.jpg";
+/* Office walk-through */
+import tour01 from "./imports/office/tour-01-entrance.jpg";
+import tour02 from "./imports/office/tour-02-welcome.jpg";
+import tour03 from "./imports/office/tour-03-waiting.jpg";
+import tour04 from "./imports/office/tour-04-front-desk.jpg";
+import tour05 from "./imports/office/tour-05-fountain.jpg";
+import tour06 from "./imports/office/tour-06-front-hall.jpg";
+import tour07 from "./imports/office/tour-07-hallway.jpg";
+import tour08 from "./imports/office/tour-08-operatory-1.jpg";
+import tour09 from "./imports/office/tour-09-operatory-5.jpg";
+import tour10 from "./imports/office/tour-10-sterilization.jpg";
+import tour11 from "./imports/office/tour-11-lab.jpg";
+import tour12 from "./imports/office/tour-12-lounge.jpg";
 import invisalignProviderImg from "./imports/invisalign-provider.png";
 import careCreditImg from "./imports/carecredit.png";
 import philipsZoomImg from "./imports/philips-zoom.jpg";
@@ -58,21 +86,42 @@ const MAPS_EMBED_URL = "https://www.google.com/maps?q=" + encodeURIComponent(ADD
  * files are 600x400, so cards are kept at a size where they stay sharp.
  * Order matters: the first four ride the top row, the rest the bottom row.
  */
+const HERO_ROW_SPLIT = 6; // first six ride the top row, the rest the bottom row
 const heroPhotos = [
-  { src: officeExteriorImg,  alt: "Atlantic Dental Care building at 1244 Perimeter Parkway, Virginia Beach" },
-  { src: officeWaitingImg,   alt: "Reception and waiting area with stone front desk" },
-  { src: officeOperatory1Img, alt: "Treatment room with a large window onto the lawn" },
-  { src: officeEntryImg,     alt: "Welcome sign on the Suite 444 entry door" },
-  { src: officeFrontDeskImg, alt: "Curved stone reception desk and wall fountain" },
-  { src: officeSignageImg,   alt: "Evelyn E. Luma, DDS Family Dentistry signage on the brick exterior" },
-  { src: officeDrLumaImg,    alt: "Dr. Luma working at her desk" },
-  { src: officeOperatory2Img, alt: "Treatment room with dental chair and natural light" },
+  { src: officeExteriorImg,         sm: officeExteriorSm,         alt: "Atlantic Dental Care building at 1244 Perimeter Parkway, Virginia Beach" },
+  { src: officeWaitingImg,          sm: officeWaitingSm,          alt: "Reception and waiting area with stone front desk" },
+  { src: officeExteriorEntranceImg, sm: officeExteriorEntranceSm, alt: "Front entrance of the building at golden hour" },
+  { src: officeOperatory1Img,       sm: officeOperatory1Sm,       alt: "Treatment room with a large window onto the lawn" },
+  { src: officeExteriorCornerImg,   sm: officeExteriorCornerSm,   alt: "Corner of the brick building with landscaping and lawn" },
+  { src: officeEntryImg,            sm: officeEntrySm,            alt: "Welcome sign on the Suite 444 entry door" },
+  { src: officeFrontDeskImg,        sm: officeFrontDeskSm,        alt: "Curved stone reception desk and wall fountain" },
+  { src: officeSignageImg,          sm: officeSignageSm,          alt: "Evelyn E. Luma, DDS Family Dentistry signage on the brick exterior" },
+  { src: officeDrLumaImg,           sm: officeDrLumaSm,           alt: "Dr. Luma working at her desk" },
+  { src: officeExteriorTreesImg,    sm: officeExteriorTreesSm,    alt: "Building exterior with crepe myrtles and the practice sign" },
+  { src: officeOperatory2Img,       sm: officeOperatory2Sm,       alt: "Treatment room with dental chair and natural light" },
+];
+
+/* Office walk-through, in the order a patient experiences it */
+const officeTour = [
+  { img: tour01, label: "Front entrance",      alt: "Front entrance of Atlantic Dental Care with the 1244 address and glass doors" },
+  { img: tour02, label: "Welcome, Suite 444",  alt: "Frosted Welcome lettering on the Suite 444 door" },
+  { img: tour03, label: "Waiting room",        alt: "Waiting room with leather chairs, coffee station, and wood floors" },
+  { img: tour04, label: "Front desk",          alt: "Curved granite front desk with workstations" },
+  { img: tour05, label: "The fountain",        alt: "Slate wall fountain engraved with Gentle Family and Cosmetic Dentistry" },
+  { img: tour06, label: "Front hallway",       alt: "Front hallway leading past the chart room" },
+  { img: tour07, label: "Down the hall",       alt: "Arched hallway to the treatment rooms" },
+  { img: tour08, label: "Treatment room",      alt: "Treatment room with dental chair, monitor, and framed art" },
+  { img: tour09, label: "Treatment room",      alt: "Treatment room with dental chair beside a window" },
+  { img: tour10, label: "Sterilization",       alt: "Sterilization area with instrument stations and cabinets" },
+  { img: tour11, label: "In-house lab",        alt: "Dental lab with sink and lab equipment" },
+  { img: tour12, label: "Team lounge",         alt: "Staff lounge with dining table and kitchen" },
 ];
 
 /* ── Data ─────────────────────────────────────────────────── */
 const navLinks = [
   { label: "Services",   href: "#services"    },
   { label: "About",      href: "#about"        },
+  { label: "Office",     href: "#office"       },
   { label: "Our Team",   href: "#team"         },
   { label: "Gallery",    href: "#gallery"      },
   { label: "Reviews",    href: "#reviews"      },
@@ -251,7 +300,18 @@ const languages: LangOption[] = [
   { label: "Yoruba",     code: "yo" },
 ];
 
+/* Google Translate is ~400 KB of script, so it's only loaded when someone actually picks a language
+   (index.html also loads it on page load when a translation cookie is already set). */
+function ensureTranslate() {
+  if (document.querySelector('script[src*="translate_a/element.js"]')) return;
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+  document.head.appendChild(s);
+}
+
 function switchLanguage(code: string) {
+  if (code !== "en") ensureTranslate();
   if (code === "en") {
     const exp = "expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     document.cookie = `googtrans=; ${exp}`;
@@ -276,7 +336,7 @@ function switchLanguage(code: string) {
     let attempts = 0;
     const interval = setInterval(() => {
       attempts++;
-      if (trySwitch() || attempts >= 20) clearInterval(interval);
+      if (trySwitch() || attempts >= 60) clearInterval(interval);   // up to 6s: the script may still be downloading
     }, 100);
   }
 }
@@ -372,6 +432,13 @@ export default function App() {
   const [menuOpen,   setMenuOpen]   = useState(false);
   const [activeTab,  setActiveTab]  = useState<"cosmetic"|"preventive">("cosmetic");
   const [lightbox,   setLightbox]   = useState<GalleryItem | null>(null);
+  const tourRef = useRef<HTMLDivElement>(null);
+  const scrollTour = (dir: number) => {
+    const el = tourRef.current;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>(".tour-card");
+    el.scrollBy({ left: dir * ((card?.offsetWidth ?? 360) + 16) * 2, behavior: "smooth" });
+  };
 
   useScrollMotion();
 
@@ -607,12 +674,20 @@ export default function App() {
       <section className="hero" aria-label="Welcome to Atlantic Dental Care">
         {/* Two rows of office photos drift in opposite directions; the whole layer parallaxes on scroll and leans with the mouse */}
         <div className="hero-media hero-strips" aria-hidden="true">
-          {[heroPhotos.slice(0, 4), heroPhotos.slice(4)].map((row, r) => (
+          {[heroPhotos.slice(0, HERO_ROW_SPLIT), heroPhotos.slice(HERO_ROW_SPLIT)].map((row, r) => (
             <div key={r} className={`strip strip-${r === 0 ? "a" : "b"}`}>
               <div className="strip-track">
                 {[...row, ...row].map((p, i) => (
                   <div key={i} className="strip-card" style={{ "--i": String(i) } as React.CSSProperties}>
-                    <img src={p.src} alt="" width={600} height={400} decoding="async" fetchPriority={r === 0 && i < 4 ? "high" : "auto"} loading={i < 4 ? "eager" : "lazy"} />
+                    {/* Phones get the 340px file, desktops the 600px one; only the first cards of each row load eagerly */}
+                    <img
+                      src={p.src}
+                      srcSet={`${p.sm} 340w, ${p.src} 600w`}
+                      sizes="(max-width: 767px) 44vw, 26vw"
+                      alt="" width={600} height={400} decoding="async"
+                      fetchPriority={r === 0 && i < 3 ? "high" : "auto"}
+                      loading={i < 4 ? "eager" : "lazy"}
+                    />
                   </div>
                 ))}
               </div>
@@ -802,6 +877,46 @@ export default function App() {
           <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
             <a href="#book" className="btn-green">Start Step 1 — Book Now</a>
           </div>
+        </div>
+      </section>
+
+      {/* ══ OFFICE WALK-THROUGH ═════════════════════════════ */}
+      <section id="office" className="section-pad" style={{ background: "var(--smoke)", overflow: "hidden" }} aria-label="Take a look around our office">
+        <div className="container">
+          <div className="tour-head">
+            <div>
+              <span className="tag">Our Office — Take a Look Around</span>
+              <h2 className="h-section">
+                <SplitLines lines={["Step inside", <em key="e" style={{ color: "var(--green)" }}>before you arrive.</em>]} />
+              </h2>
+            </div>
+            <div className="tour-controls rv" style={motionDelay(0.2)}>
+              <p>Scroll sideways, or use the arrows</p>
+              <button type="button" className="tour-btn" aria-label="Previous photos" onClick={() => scrollTour(-1)}>←</button>
+              <button type="button" className="tour-btn" aria-label="Next photos" onClick={() => scrollTour(1)}>→</button>
+            </div>
+          </div>
+        </div>
+        <div className="tour-track rv" ref={tourRef} data-lenis-prevent tabIndex={0} aria-label="Office photos in walking order; scroll horizontally">
+          {officeTour.map((stop, i) => (
+            <figure
+              key={stop.img}
+              className="tour-card"
+              role="button" tabIndex={0}
+              aria-label={`View larger: ${stop.label}`}
+              data-cursor="view"
+              onClick={() => setLightbox({ label: stop.label, img: stop.img, alt: stop.alt })}
+              onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setLightbox({ label: stop.label, img: stop.img, alt: stop.alt }); } }}
+            >
+              <div className="pw" data-amp="0.5">
+                <img src={stop.img} alt={stop.alt} width={600} height={400} loading="lazy" decoding="async" style={{ objectFit: "cover" }} />
+              </div>
+              <figcaption>
+                <span className="tour-num">{String(i + 1).padStart(2, "0")}</span>
+                <span>{stop.label}</span>
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 
@@ -1588,9 +1703,9 @@ export default function App() {
       <div className="mobile-cta-bar" role="region" aria-label="Quick contact">
         <a href={`tel:${PHONE}`} className="mobile-cta-call">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.7a2 2 0 0 1 1.7 2z"/></svg>
-          Call
+          Call Now
         </a>
-        <a href="#book" className="mobile-cta-book">Book an Appointment →</a>
+        <a href="#book" className="mobile-cta-book">Book Online →</a>
       </div>
 
       {/* ══ FOOTER ══════════════════════════════════════════ */}
