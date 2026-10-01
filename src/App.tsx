@@ -151,10 +151,9 @@ const pillars = [
 const cosmeticServices = [
   { emoji: "⬡", title: "Dental Implant Restoration", desc: "Custom crowns, bridges, and implant-supported dentures secured to your dental implants — restoring full chewing function and a natural, permanent-looking smile after tooth loss." },
   { emoji: "◇", title: "Composite Fillings",     desc: "Tooth-colored fillings matched to your teeth. Used for decay, chips, cracks, or closing gaps — completed in a single appointment." },
-  { emoji: "◉", title: "Porcelain Crowns",       desc: "Natural-looking crowns that restore strength and appearance to damaged or weakened teeth, crafted to blend seamlessly." },
+  { emoji: "◉", title: "Porcelain Crowns",       desc: "Natural-looking crowns that restore strength and appearance to damaged or weakened teeth — including BruxZir® solid zirconia crowns for patients who grind, virtually unbreakable with lifelike translucency." },
   { emoji: "◆", title: "Porcelain Veneers",      desc: "Thin, custom-shaded porcelain shells bonded to the front of your teeth to correct chips, gaps, discoloration, and uneven shape — a conservative route to a brand-new smile." },
   { emoji: "▲", title: "Porcelain Bridges",      desc: "Fixed restorations that fill gaps from missing teeth, anchored to neighboring teeth for a stable, natural-looking result." },
-  { emoji: "✦", title: "BruxZir® Crowns",        desc: "Solid zirconia crowns for grinders — virtually unbreakable, with natural translucency that mimics real tooth structure." },
   { emoji: "◈", title: "Empress® Restorations",  desc: "All-ceramic restorations with exceptional esthetics and strength for front and back teeth with lifelike translucency." },
   { emoji: "⊕", title: "Inlays & Onlays",        desc: "Conservative alternatives to full crowns — custom-fabricated to repair moderate decay while preserving natural tooth structure." },
   { emoji: "◎", title: "Dentures & Partials",    desc: "Full and partial dentures custom-fitted to restore your smile, function, and confidence after tooth loss." },
