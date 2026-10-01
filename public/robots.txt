@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Block crawling of build artifacts
+Disallow: /assets/*.map
+
+Sitemap: https://www.drluma.com/sitemap.xml
