@@ -20,6 +20,7 @@ import teamMichelleImg from "./imports/team-michelle-boone.jpg";
 import teamLaurieImg from "./imports/team-laurie-harwood.jpg";
 import teamSharmieImg from "./imports/team-sharmie-woodall.jpg";
 import teamFabieImg from "./imports/team-fabie-orndorff.jpg";
+import teamAmandaImg from "./imports/team-amanda-mcbride.jpg";
 import teamGroupImg from "./imports/team-group.jpg";
 import officeExteriorImg from "./imports/office/exterior.jpg";
 import officeSignageImg from "./imports/office/signage.jpg";
@@ -179,7 +180,7 @@ type TeamMember = { name: string; role: string; bio: string; photo?: string };
 const team: TeamMember[] = [
   { name: "Dora Scott",        photo: teamDoraImg, role: "Office Manager",                          bio: "Dora keeps Atlantic Dental Care running smoothly for every patient and provider. With decades of dental office experience, she ensures your visit is seamless from the moment you call to the moment you leave." },
   { name: "Michelle Boone",    photo: teamMichelleImg, role: "Front Office Coordinator",                bio: "Michelle is often the first friendly voice you hear when you contact our office. She handles patient communications, insurance questions, and helps make every experience welcoming and stress-free." },
-  { name: "Amanda McBride",    role: "Front Office Agent & Scheduling Coordinator", bio: "Amanda specializes in keeping the schedule organized so patients are seen on time and get the appointments they need. She makes booking easy and works hard to accommodate your busy life." },
+  { name: "Amanda McBride",    photo: teamAmandaImg, role: "Front Office Agent & Scheduling Coordinator", bio: "Amanda specializes in keeping the schedule organized so patients are seen on time and get the appointments they need. She makes booking easy and works hard to accommodate your busy life." },
   { name: "Christine Nguyen",  photo: teamChristineImg, role: "Dental Hygienist",                        bio: "Christine brings precision and warmth to every hygiene appointment. Her thorough cleanings and patient education help patients build lasting habits for a healthier smile." },
   { name: "Laurie Harwood",    photo: teamLaurieImg, role: "Dental Hygienist",                        bio: "Laurie is dedicated to making cleanings comfortable and informative. She takes time with every patient to ensure their gum health and overall oral wellness are on the right track." },
   { name: "Sharmie Woodall",   photo: teamSharmieImg, role: "Dental Assistant",                        bio: "Sharmie's chairside skill and calm presence make a real difference — especially for patients who feel anxious. She supports Dr. Luma with expertise and genuine care for every patient." },
