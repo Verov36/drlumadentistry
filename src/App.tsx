@@ -1652,6 +1652,7 @@ export default function App() {
                         <optgroup label="Cosmetic & Restorative">
                           <option>Dental Implant Restoration</option>
                           <option>Porcelain Crowns</option>
+                          <option>Porcelain Veneers</option>
                           <option>Porcelain Bridges</option>
                           <option>Composite Fillings</option>
                           <option>Dentures / Partial Dentures</option>
