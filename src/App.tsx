@@ -152,6 +152,7 @@ const cosmeticServices = [
   { emoji: "⬡", title: "Dental Implant Restoration", desc: "Custom crowns, bridges, and implant-supported dentures secured to your dental implants — restoring full chewing function and a natural, permanent-looking smile after tooth loss." },
   { emoji: "◇", title: "Composite Fillings",     desc: "Tooth-colored fillings matched to your teeth. Used for decay, chips, cracks, or closing gaps — completed in a single appointment." },
   { emoji: "◉", title: "Porcelain Crowns",       desc: "Natural-looking crowns that restore strength and appearance to damaged or weakened teeth, crafted to blend seamlessly." },
+  { emoji: "◆", title: "Porcelain Veneers",      desc: "Thin, custom-shaded porcelain shells bonded to the front of your teeth to correct chips, gaps, discoloration, and uneven shape — a conservative route to a brand-new smile." },
   { emoji: "▲", title: "Porcelain Bridges",      desc: "Fixed restorations that fill gaps from missing teeth, anchored to neighboring teeth for a stable, natural-looking result." },
   { emoji: "✦", title: "BruxZir® Crowns",        desc: "Solid zirconia crowns for grinders — virtually unbreakable, with natural translucency that mimics real tooth structure." },
   { emoji: "◈", title: "Empress® Restorations",  desc: "All-ceramic restorations with exceptional esthetics and strength for front and back teeth with lifelike translucency." },
@@ -395,7 +396,7 @@ function Stat({ value, label, delay }: { value: string; label: string; delay: nu
 }
 
 const tickerItems = [
-  "Dental Implant Restoration", "Invisalign® Provider", "Philips Zoom! Whitening", "Laser Dentistry",
+  "Dental Implant Restoration", "Porcelain Veneers", "Invisalign® Provider", "Philips Zoom! Whitening", "Laser Dentistry",
   "Digital X-Rays", "iTero™ 3D Scanning", "Same-Day Emergency Care", "Se habla español",
   "CareCredit Accepted", "25 Years of Experience",
 ];
@@ -405,7 +406,7 @@ const faqs = [
   { q: "Is Dr. Luma accepting new patients in Virginia Beach?",
     a: "Yes! Atlantic Dental Care welcomes new patients. Call 757-430-2600 or book online. Same-day appointments are often available." },
   { q: "What dental services does Atlantic Dental Care offer?",
-    a: "We offer dental implant restoration, Invisalign, Philips Zoom whitening, porcelain crowns and bridges, composite fillings, dentures, BruxZir crowns, inlays and onlays, cleanings, exams, fluoride treatments, periodontal disease treatment, and more." },
+    a: "We offer dental implant restoration, Invisalign, Philips Zoom whitening, porcelain veneers, crowns and bridges, composite fillings, dentures, BruxZir crowns, inlays and onlays, cleanings, exams, fluoride treatments, periodontal disease treatment, and more." },
   { q: "Does Dr. Luma recommend fluoride for adults?",
     a: "Yes. Dr. Luma recommends fluoride for all of her patients, not just children. Professional fluoride strengthens enamel and helps prevent decay, especially for patients with exposed roots, dry mouth, or a history of cavities." },
   { q: "What technology does Atlantic Dental Care use?",
@@ -1747,7 +1748,7 @@ export default function App() {
             {/* Services */}
             <div>
               <p style={{ color: "rgba(255,255,255,0.28)", fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "1rem" }}>Services</p>
-              {["Dental Implant Restoration","Invisalign®","Zoom! Whitening","Porcelain Crowns","Cleanings & Exams","Periodontal Care"].map(s => (
+              {["Dental Implant Restoration","Invisalign®","Zoom! Whitening","Porcelain Veneers","Porcelain Crowns","Cleanings & Exams","Periodontal Care"].map(s => (
                 <a key={s} href="#services" style={{ display: "block", color: "rgba(255,255,255,0.42)", fontSize: 13, textDecoration: "none", marginBottom: "0.5rem" }}>{s}</a>
               ))}
             </div>
