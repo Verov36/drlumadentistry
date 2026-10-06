@@ -8,7 +8,6 @@ import adaImg from "./imports/ada.png";
 import vdaImg from "./imports/vda.jpeg";
 import aboutDrLumaImg from "./imports/about-dr-luma.jpg";
 import porcelainCrownImg from "./imports/pic-porcelain-crown-before-after.jpg";
-import implantRestorationImg from "./imports/implants2-2-scaled.jpg";
 import smileMakeoverImg from "./imports/smile-makeover-before-after.jpg";
 import veneerTryInImg from "./imports/veneer-try-in.jpg";
 import veneersFinalImg from "./imports/veneers-final.jpg";
@@ -200,7 +199,7 @@ const unsplash = (id: string) => `https://images.unsplash.com/${id}?auto=format&
 type GalleryItem = { label: string; img: string; alt: string; patient?: boolean; contain?: boolean };
 const galleryItems: GalleryItem[] = [
   { label: "Smile Makeover — Upper Front Teeth", img: smileMakeoverImg, patient: true, alt: "Before and after: discolored, uneven upper front teeth restored with porcelain veneers — actual Atlantic Dental Care patient" },
-  { label: "Dental Implant Restoration", img: implantRestorationImg, contain: true, alt: "Dental implant restoration — implant posts before, and the finished implant-supported crowns after" },
+  { label: "Dental Implant Restoration", img: unsplash("photo-1771442873035-474765b40ac6"), alt: "A porcelain crown fitted to a dental implant, held up in the treatment room" },   // Unsplash
   { label: "Porcelain Crowns",    img: porcelainCrownImg, patient: true, alt: "Porcelain crown before and after — actual Atlantic Dental Care patient" },
   { label: "Porcelain Veneer Try-In", img: veneerTryInImg, patient: true, alt: "A porcelain veneer being tried in on an upper front tooth — actual Atlantic Dental Care patient" },
   { label: "Porcelain Veneers",        img: veneersFinalImg, patient: true, alt: "Finished porcelain veneers on the upper front teeth, side view — actual Atlantic Dental Care patient" },
