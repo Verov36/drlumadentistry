@@ -281,6 +281,20 @@ function PhilipsZoom({ dark = false }: { dark?: boolean }) {
   );
 }
 
+/* Tidewater Dental Association — simple wordmark drawn in the site's own colors (no official artwork was supplied) */
+function TidewaterLogo({ height = 48 }: { height?: number }) {
+  return (
+    <svg viewBox="0 0 230 60" height={height} width={Math.round(height * 230 / 60)} role="img" aria-label="Tidewater Dental Association member" style={{ display: "block" }}>
+      <circle cx="30" cy="30" r="26" fill="none" stroke="#162b50" strokeWidth="2.5" />
+      <path d="M12 25c6-6 12-6 18 0s12 6 18 0" fill="none" stroke="#0097b2" strokeWidth="3.2" strokeLinecap="round" />
+      <path d="M12 34c6-6 12-6 18 0s12 6 18 0" fill="none" stroke="#0097b2" strokeWidth="3.2" strokeLinecap="round" opacity="0.7" />
+      <path d="M12 43c6-6 12-6 18 0s12 6 18 0" fill="none" stroke="#0097b2" strokeWidth="3.2" strokeLinecap="round" opacity="0.4" />
+      <text x="66" y="29" fontFamily="'Outfit', system-ui, sans-serif" fontSize="19" fontWeight="800" letterSpacing="1" fill="#162b50">TIDEWATER</text>
+      <text x="66" y="45" fontFamily="'Outfit', system-ui, sans-serif" fontSize="8.6" fontWeight="700" letterSpacing="2.3" fill="#0097b2">DENTAL ASSOCIATION</text>
+    </svg>
+  );
+}
+
 /* ADA Member */
 
 type LangOption = { label: string; code: string };
@@ -764,6 +778,10 @@ export default function App() {
             <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", border: "1px solid #e8d0d0", borderRadius: 6, padding: "0.5rem 0.875rem", background: "#fdf5f5" }}>
               <img src={vdaImg} alt="Virginia Dental Association member" loading="lazy" decoding="async" style={{ height: 48, width: "auto", objectFit: "contain" }} />
             </div>
+            {/* Tidewater Dental Association */}
+            <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", border: "1px solid #cfe3ee", borderRadius: 6, padding: "0.5rem 0.875rem", background: "#f4f9fc" }}>
+              <TidewaterLogo height={44} />
+            </div>
           </div>
         </div>
       </section>
@@ -965,7 +983,7 @@ export default function App() {
               </p>
 
               <div className="about-creds">
-                {["ADA Member","Zoom! Certified","Invisalign Provider","CareCredit Accepted","AAP Award Recipient","25 Years of Experience"].map(b => (
+                {["ADA Member","Tidewater Dental Association","Zoom! Certified","Invisalign Provider","CareCredit Accepted","AAP Award Recipient","25 Years of Experience"].map(b => (
                   <div key={b} style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
                     <div style={{ width: 6, height: 6, background: "var(--green)", borderRadius: "50%", flexShrink: 0 }} />
                     <span style={{ color: "rgba(255,255,255,0.58)", fontSize: 13 }}>{b}</span>
@@ -1740,6 +1758,9 @@ export default function App() {
                 </div>
                 <div style={{ background: "#fff", borderRadius: 4, padding: "5px 10px" }}>
                   <img src={vdaImg} alt="Virginia Dental Association member" style={{ height: 44, width: "auto", display: "block", objectFit: "contain" }} />
+                </div>
+                <div style={{ background: "#fff", borderRadius: 4, padding: "5px 10px" }}>
+                  <TidewaterLogo height={40} />
                 </div>
               </div>
             </div>
