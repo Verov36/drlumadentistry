@@ -1005,7 +1005,7 @@ export default function App() {
 
           {/* Team photo banner */}
           <div className="pw team-banner rv" data-amp="0.8" style={{ marginBottom: 2 }}>
-            <img src={teamGroupImg} alt="The Atlantic Dental Care team in the Virginia Beach office" width={1600} height={607} loading="lazy" decoding="async" style={{ objectFit: "cover", objectPosition: "center 35%" }} />
+            <img src={teamGroupImg} alt="The Atlantic Dental Care team in the Virginia Beach office" width={1600} height={900} loading="lazy" decoding="async" style={{ objectFit: "cover", objectPosition: "center 35%" }} />
           </div>
 
           {/* Dr. Luma featured */}
