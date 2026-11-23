@@ -150,3 +150,5 @@
 # ---------------------------------------------------------------------------
 src/imports/about-dr-luma.jpg  -filter -diff -merge -text
 src/imports/team-dr-luma.jpg   -filter -diff -merge -text
+src/imports/office/tour-07-hallway.jpg       -filter -diff -merge -text
+src/imports/office/tour-08-operatory-1.jpg   -filter -diff -merge -text
